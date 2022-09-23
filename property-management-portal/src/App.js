@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/Home/Home';
 import PageNotFound from "./components/PageNotFound/PageNotFound";
+import Footer from './components/Footer/Footer';
 
 function App() {
     return (
@@ -11,10 +12,11 @@ function App() {
             <Header />
             <BrowserRouter>
                 <Routes>
-                    <Route exact path='/' element={< Home />} />
+                    <Route exact path='/' element={<Home />} />
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </BrowserRouter>
+            <Footer />
         </div>
     );
 }
