@@ -1,5 +1,6 @@
 package edu.miu.waa.propertymanagementservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
