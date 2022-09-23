@@ -5,8 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,7 +37,7 @@ public class Property {
 
     private LocalDate availableDate;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "favoriteProperties")
     private Set<User> users;
 
     private boolean listed = true;

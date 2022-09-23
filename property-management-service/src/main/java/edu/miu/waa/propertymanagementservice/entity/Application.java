@@ -20,4 +20,6 @@ public class Application {
 
     @ManyToOne
     private User owner;
+
+    private String content;
 }
