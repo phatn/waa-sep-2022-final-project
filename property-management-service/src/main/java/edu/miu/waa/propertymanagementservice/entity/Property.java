@@ -1,12 +1,11 @@
 package edu.miu.waa.propertymanagementservice.entity;
 
+import edu.miu.waa.propertymanagementservice.converter.SetStringConverter;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,8 +31,11 @@ public class Property {
     private Address location;
 
 
-    @OneToMany(mappedBy = "property")
-    private Set<Picture> pictures;
+//    @OneToMany(mappedBy = "property")
+//    private Set<Picture> pictures;
+
+    @Convert(converter = SetStringConverter.class)
+    private Set<String> pictures;
 
     private String overview;
 

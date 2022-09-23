@@ -1,0 +1,31 @@
+package edu.miu.waa.propertymanagementservice.dto;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import edu.miu.waa.propertymanagementservice.entity.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class PropertyDto {
+    private int id;
+    private double price;
+    private int numOfRoom;
+    private PropertyType propertyType;
+    private HomeType homeType;
+    private Address location;
+    private Set<String> picture;
+    private String overview;
+    private LocalDate availableDate;
+    private boolean listed = true;
+    private boolean deleted = false;
+    private UserDto owner;
+    private String deletedBy;
+}
