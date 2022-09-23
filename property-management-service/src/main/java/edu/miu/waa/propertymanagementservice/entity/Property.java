@@ -41,7 +41,7 @@ public class Property {
 
     private LocalDate availableDate;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "favoriteProperties")
     private Set<User> users;
 
     private boolean listed = true;

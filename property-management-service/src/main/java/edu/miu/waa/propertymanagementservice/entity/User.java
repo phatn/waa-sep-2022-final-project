@@ -19,7 +19,11 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany
+    @JoinTable(name = "favorite_properties_users",
+            joinColumns = {@JoinColumn(name = "user_id")},
+    inverseJoinColumns = {@JoinColumn(name="property_id")})
+
     private Set<Property> favoriteProperties;
 
     @OneToMany(mappedBy = "owner")
