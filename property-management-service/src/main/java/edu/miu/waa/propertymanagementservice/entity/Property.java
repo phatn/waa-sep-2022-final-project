@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,30 +22,32 @@ public class Property {
 
     private int numOfRoom;
 
+    @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
 
+    @Enumerated(EnumType.STRING)
     private HomeType homeType;
 
     @Embedded
     private Address location;
 
-    @ElementCollection
-    private Set<String> photos;
+
+    @OneToMany(mappedBy = "property")
+    private Set<Picture> pictures;
 
     private String overview;
 
     private LocalDate availableDate;
 
     @ManyToMany
-    private Set<User> favoriteUsers;
+    private Set<User> users;
 
     private boolean listed = true;
 
     private boolean deleted = false;
 
     @ManyToOne
-    //@JoinColumn(name = "owner_id")
-    private User user;
+    private User owner;
 
     private String deletedBy;
 

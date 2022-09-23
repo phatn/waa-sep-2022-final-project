@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 @Getter
 @Setter
 public class User {
@@ -18,10 +19,10 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "favoriteUsers")
+    @ManyToMany(mappedBy = "users")
     private Set<Property> favoriteProperties;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "owner")
     private Set<Property> properties;
 
     @OneToMany(mappedBy = "owner")
