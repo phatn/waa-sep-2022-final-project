@@ -1,3 +1,39 @@
 spring:
   application:
     name: property-management-service
+
+  datasource:
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/property_mgmt_db
+    username: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+
+  main:
+    allow-bean-definition-overriding: true
+
+
+server:
+  port: 8080
+
+aws:
+  s3-bucket: "waaproject-bucket"
+  region: "us-west-1"
+  arn: "arn:aws:s3:::waaproject-bucket"
+  access-key-id: ""
+  secret-access-key: ""

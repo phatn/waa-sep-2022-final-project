@@ -11,6 +11,7 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { SecuredPage } from "./components/SecuredPage";
 import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
 
+import { Property } from 'components/Property/Property';
 
 function App() {
     return (
@@ -27,6 +28,8 @@ function App() {
                         </PrivateRoute>
                     } />
                     <Route path="*" element={<PageNotFound />} />
+            
+                    <Route path='/property' element={<Property />} />
                 </Routes>
             </BrowserRouter>
             <Footer />
