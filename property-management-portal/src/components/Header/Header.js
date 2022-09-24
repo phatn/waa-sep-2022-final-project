@@ -4,8 +4,8 @@ import {useKeycloak} from "@react-keycloak/web";
 import {Link} from "react-router-dom";
 
 const Header = () => {
+    const { keycloak } = useKeycloak();
 
-    const { keycloak, initialized } = useKeycloak();
     return (
         <header className="header-area">
             <div className="container">

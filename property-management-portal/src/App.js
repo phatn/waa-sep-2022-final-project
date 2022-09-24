@@ -1,15 +1,15 @@
 import React from 'react';
 import './App.css';
-import Header from './components/Header/Header';
+import Header from 'components/Header/Header';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './components/Home/Home';
-import PageNotFound from './components/PageNotFound/PageNotFound';
-import Footer from './components/Footer/Footer';
+import Home from 'components/Home/Home';
+import PageNotFound from 'components/PageNotFound/PageNotFound';
+import Footer from 'components/Footer/Footer';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { keycloak } from './Keycloak';
-import { PrivateRoute } from './components/PrivateRoute';
-import { SecuredPage } from './components/SecuredPage';
-import PropertyDetail from './components/PropertyDetail/PropertyDetail';
+import { PrivateRoute } from 'components/PrivateRoute';
+import { SecuredPage } from 'components/SecuredPage';
+import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
 import { Property } from 'components/Property/Property';
 
 function App() {
@@ -30,8 +30,8 @@ function App() {
 
                         <Route path="/property" element={<Property />} />
                     </Routes>
+                    <Footer />
                 </BrowserRouter>
-                <Footer />
             </ReactKeycloakProvider>
         </div>
     );
