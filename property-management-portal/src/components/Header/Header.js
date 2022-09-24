@@ -1,6 +1,11 @@
 import './Header.scss';
+import React from "react";
+import {useKeycloak} from "@react-keycloak/web";
+import {Link} from "react-router-dom";
 
 const Header = () => {
+
+    const { keycloak, initialized } = useKeycloak();
     return (
         <header className="header-area">
             <div className="container">
@@ -14,9 +19,21 @@ const Header = () => {
                         </div>
                         <div className="col-md-4">
                             <div className="header-top-right">
-                                <p>
-                                    <a href="#"><i className="fa fa-sign-in"></i> Sign in / Sign Up</a>
-                                </p>
+
+                                {!keycloak.authenticated && (
+                                    <p>
+                                        <a href="#" onClick={() => keycloak.login()}><i className="fa fa-sign-in"></i>Login</a>
+                                    </p>
+                                )}
+
+                                {!!keycloak.authenticated && (
+                                    <p>
+                                        Welcome, <strong>{keycloak.tokenParsed.preferred_username}!</strong> &nbsp;
+                                        <a href="#" onClick={() => keycloak.logout()}><i className="fa fa-sign-out"></i>Logout</a>
+                                    </p>
+
+                                )}
+
                             </div>
                         </div>
                     </div>
@@ -195,6 +212,12 @@ const Header = () => {
                                     <ul id="navigation">
                                         <li className="active">
                                             <a href="/">Home</a>
+                                        </li>
+                                        <li>
+                                            <Link to="/property-detail">Property Detail</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/secured">Secure Page</Link>
                                         </li>
                                         <li>
                                             <a href="components/Header/Header#">Listing</a>

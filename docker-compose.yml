@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  db:
+  postgres:
     image: postgres:14.5-alpine
     restart: always
     environment:
@@ -10,6 +10,17 @@ services:
       - '5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0.2
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - '9090:8080'
+    command: start-dev
+
 volumes:
   db:
     driver: local
