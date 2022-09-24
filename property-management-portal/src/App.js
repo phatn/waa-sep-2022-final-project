@@ -29,7 +29,7 @@ function App() {
                     } />
                     <Route path="*" element={<PageNotFound />} />
             
-                    <Route path='/property' element={<Property />} />
+                    <Route exact path='/property' element={<Property />} />
                 </Routes>
             </BrowserRouter>
             <Footer />
