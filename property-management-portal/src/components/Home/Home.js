@@ -1,22 +1,29 @@
-import Carousel from 'react-material-ui-carousel';
-import { Paper } from '@mui/material';
-
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import './Home.scss';
 import SearchWidget from '../SearchWidget/SearchWidget';
 
 const Home = () => {
+    let settings = {
+        dots: true,
+        speed: 300,
+        draggable: false,
+        lazyLoad: 'ondemand'
+    };
     return (
         <div className="container-fluid home">
-            <Carousel
-                fullHeightHover={false}>
-                <Paper>
-                    <img src="/slider-1.jpeg" alt="slider-1" />
-                </Paper>
-                <Paper>
-                    <img src="/slider-2.jpg" alt="slider-1" />
-                </Paper>
-            </Carousel>
-            <SearchWidget />
+            <Slider {...settings}>
+                <div>
+                    <img className="pic" src="/slider-1.jpeg" alt="slider-1" />
+                </div>
+                <div>
+                    <img className="pic" src="/slider-2.jpg" alt="slider-1" />
+                </div>
+            </Slider>
+            <div className="widget">
+                <SearchWidget />
+            </div>
         </div>
     );
 };
