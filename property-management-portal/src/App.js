@@ -10,8 +10,8 @@ import { keycloak } from "./Keycloak";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { SecuredPage } from "./components/SecuredPage";
 import PropertyDetail from "./components/PropertyDetail/PropertyDetail";
-
 import { Property } from 'components/Property/Property';
+import Dashboard from './components/Dashboard/Dashboard';
 
 function App() {
     return (
@@ -21,6 +21,7 @@ function App() {
                 <Header />
                 <Routes>
                     <Route exact path='/' element={<Home />} />
+                    <Route exact path="/dashboard" element={<Dashboard />} />
                     <Route path="/property-detail" element={<PropertyDetail />} />
                     <Route path="/secured" element={
                         <PrivateRoute>
@@ -28,7 +29,6 @@ function App() {
                         </PrivateRoute>
                     } />
                     <Route path="*" element={<PageNotFound />} />
-            
                     <Route path='/property' element={<Property />} />
                 </Routes>
             </BrowserRouter>

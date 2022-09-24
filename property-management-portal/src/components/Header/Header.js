@@ -223,6 +223,9 @@ const Header = () => {
                                             <Link to="/secured">Secure Page</Link>
                                         </li>
                                         <li>
+                                            <Link to="/dashboard">Dashboard</Link>
+                                        </li>
+                                        <li>
                                             <Link to="components/Header/Header#">Features</Link>
                                             <ul>
                                                 <li className="submenu-parent">
@@ -260,9 +263,6 @@ const Header = () => {
                                                     <Link to="add-property.html">Add New Property</Link>
                                                 </li>
                                             </ul>
-                                        </li>
-                                        <li>
-                                            <Link to="contact.html">Contact</Link>
                                         </li>
                                     </ul>
                                 </nav>
