@@ -12,7 +12,7 @@ VALUES
 
 -- PROPERTY
 
-INSERT INTO property(price, num_of_room, property_type, home_type, overview, street, city, zip, listed, deleted, available_date, owner_id)
+INSERT INTO property(price, num_of_room, property_type, home_type, overview, street, city, zip_code, listed, deleted, available_date, owner_id)
 VALUES
     (150000, 3, 'RENT', 'APARTMENT', 'The best apartment in the US', '900 North 12th Street', 'Fairfield', '56556', true, false, CURRENT_DATE, 1),
     (200000, 2, 'BUY', 'CONDO', 'The best condo in the US', '111 North 11th Street', 'Fairfield', '56556', true, false, CURRENT_DATE, 1),
