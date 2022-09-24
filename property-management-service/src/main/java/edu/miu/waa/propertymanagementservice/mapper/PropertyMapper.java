@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,11 +23,19 @@ public class PropertyMapper {
         return properties.stream().map(this::toDto).collect(Collectors.toSet());
     }
 
+    public List<PropertyDto> toListDtos(List<Property> properties) {
+        return properties.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
     public Property toEntity(PropertyDto propertyDto) {
         return mapper.map(propertyDto, Property.class);
     }
 
     public Set<Property> toEntities(Set<PropertyDto> propertyDtos) {
         return propertyDtos.stream().map(this::toEntity).collect(Collectors.toSet());
+    }
+
+    public List<Property> toEntityList(List<PropertyDto> propertyDtos) {
+        return propertyDtos.stream().map(this::toEntity).collect(Collectors.toList());
     }
 }
