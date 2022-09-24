@@ -32,13 +32,13 @@ const SearchWidget = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    // value={age}
+                                    value={`10`}
                                     label="Age"
                                     // onChange={handleChange}
                                 >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
+                                    <MenuItem value={`10`}>Ten</MenuItem>
+                                    <MenuItem value={`20`}>Twenty</MenuItem>
+                                    <MenuItem value={`10`}>Thirty</MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
@@ -48,13 +48,13 @@ const SearchWidget = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    // value={age}
+                                    value={`10`}
                                     label="Age"
                                     // onChange={handleChange}
                                 >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
+                                    <MenuItem value={`10`}>Ten</MenuItem>
+                                    <MenuItem value={`20`}>Twenty</MenuItem>
+                                    <MenuItem value={`30`}>Thirty</MenuItem>
                                 </Select>
                             </FormControl>
                         </div>

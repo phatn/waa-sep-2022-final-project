@@ -46,25 +46,13 @@ header {
       position: absolute;
       content: "";
       width: 50px;
-      height: 82px;
+      height: 100%;
       right: 225px;
       top: 0;
       border-color: #3F85CE transparent;
       border-style: solid;
       border-width: 0 25px 80px 30px;
     }
-
-    //
-    //&:after {
-    //  position: absolute;
-    //  content: "";
-    //  right: -158%;
-    //  width: 1980px;
-    //  height: 101%;
-    //  top: -1px;
-    //  background: #3F85CE;
-    //  z-index: -1;
-    //}
   }
 
   .site-logo {
