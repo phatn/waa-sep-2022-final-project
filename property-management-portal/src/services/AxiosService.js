@@ -1,5 +1,5 @@
 import axios from 'axios';
-import APIServer from 'constant/APIServer';
+import BASE_URL from 'constant/APIConstant';
 
 export const AxiosService = (token, isFile = false) => {
   const axiosInstance = axios.create();
@@ -7,7 +7,7 @@ export const AxiosService = (token, isFile = false) => {
   axiosInstance.interceptors.request.use(
     (config) => {
       const { origin } = new URL(config.url);
-      const allowedOrigin = [APIServer.BASEURL];
+      const allowedOrigin = [BASE_URL];
 
       if (allowedOrigin.includes(origin)) {
         config.headers.authorization = `Bearer ${token}`;

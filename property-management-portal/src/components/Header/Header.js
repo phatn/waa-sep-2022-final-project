@@ -214,6 +214,9 @@ const Header = () => {
                                             <a href="/">Home</a>
                                         </li>
                                         <li>
+                                            <Link to="/property">Property</Link>
+                                        </li>
+                                        <li>
                                             <Link to="/property-detail">Property Detail</Link>
                                         </li>
                                         <li>
