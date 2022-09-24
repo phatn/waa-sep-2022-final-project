@@ -6,6 +6,8 @@ export const AxiosService = (token, isFile = false) => {
 
   axiosInstance.interceptors.request.use(
     (config) => {
+      config.baseURL = BASE_URL;
+      
       const { origin } = new URL(config.url);
       const allowedOrigin = [BASE_URL];
 
