@@ -1,0 +1,28 @@
+import axios from 'axios';
+import APIServer from 'constant/APIServer';
+
+export const AxiosService = (token, isFile = false) => {
+  const axiosInstance = axios.create();
+
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const { origin } = new URL(config.url);
+      const allowedOrigin = [APIServer.BASEURL];
+
+      if (allowedOrigin.includes(origin)) {
+        config.headers.authorization = `Bearer ${token}`;
+        if (!isFile) {
+          config.headers.post = { "Content-Type": "application/json" };
+          config.headers.put = { "Content-Type": "application/json" };
+        } else {
+          config.headers.post = { "Content-Type": "multipart/form-data" };
+        }
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+  return axiosInstance;
+};

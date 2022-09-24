@@ -30,3 +30,10 @@ spring:
 
 server:
   port: 8080
+
+aws:
+  s3-bucket: "waaproject-bucket"
+  region: "us-west-1"
+  arn: "arn:aws:s3:::waaproject-bucket"
+  access-key-id: ""
+  secret-access-key: ""
