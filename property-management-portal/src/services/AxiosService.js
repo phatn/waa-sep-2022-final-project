@@ -1,5 +1,5 @@
 import axios from 'axios';
-import BASE_URL from 'constant/APIConstant';
+import { BASE_URL } from 'src/constants';
 
 export const AxiosService = (token, isFile = false) => {
   const axiosInstance = axios.create();
