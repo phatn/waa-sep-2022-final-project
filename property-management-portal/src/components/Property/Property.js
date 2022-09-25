@@ -29,7 +29,7 @@ export const Property = (props) => {
         disableEnforceFocus
         disableAutoFocus
         open={isOpenForm}
-        onClose={closeForm}
+        //onClose={closeForm}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -37,7 +37,8 @@ export const Property = (props) => {
         }}
       >
         <Fade >
-          <CreateProperty />
+          <CreateProperty
+            closed={closeForm} />
         </Fade>
       </Modal>
     </div>

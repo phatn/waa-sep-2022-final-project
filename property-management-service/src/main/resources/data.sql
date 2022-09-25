@@ -3,7 +3,7 @@ INSERT INTO users(email)
 VALUES
     ('phat@gmail.com'),
     ('thiep@gmail.com'),
-    ('yen@gmail.com'),
+    ('truthblue82@gmail.com'),
     ('phong@gmail.com'),
     ('adam@gmail.com'),
     ('michael@gmail.com');
