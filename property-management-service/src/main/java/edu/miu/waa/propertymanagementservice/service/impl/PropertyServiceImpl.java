@@ -4,6 +4,7 @@ import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
+import edu.miu.waa.propertymanagementservice.exception.NotFoundException;
 import edu.miu.waa.propertymanagementservice.mapper.PropertyMapper;
 import edu.miu.waa.propertymanagementservice.repository.PropertyRepository;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
@@ -33,9 +34,11 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto findById(int id) {
-        return propertyRepo.findById(id)
-                .map(propertyMapper::toDto)
-                .orElse(new PropertyDto());
+        Property property = propertyRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));
+        PropertyDto propertyDto = propertyMapper.toDto(property);
+        propertyDto.setPicture(property.getPictures());
+        return propertyDto;
     }
 
     @Override
