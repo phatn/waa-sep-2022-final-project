@@ -9,12 +9,14 @@ import edu.miu.waa.propertymanagementservice.mapper.PropertyMapper;
 import edu.miu.waa.propertymanagementservice.repository.PropertyRepository;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepo;
     private final PropertyMapper propertyMapper;
@@ -41,6 +43,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto findById(int id) {
+        log.info("Fetching property: {}", id);
         return propertyRepo.findById(id)
                 .map(propertyMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));
