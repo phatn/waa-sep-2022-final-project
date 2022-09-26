@@ -34,11 +34,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto findById(int id) {
-        Property property = propertyRepo.findById(id)
+        return propertyRepo.findById(id)
+                .map(propertyMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));
-        PropertyDto propertyDto = propertyMapper.toDto(property);
-        propertyDto.setPicture(property.getPictures());
-        return propertyDto;
     }
 
     @Override

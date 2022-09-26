@@ -20,7 +20,7 @@ function App() {
                     <Header />
                     <Routes>
                         <Route exact path="/" element={<Home />} />
-                        <Route path="/property-detail" element={<PropertyDetail />} />
+                        <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
                         <Route path="/secured" element={
                             <PrivateRoute>

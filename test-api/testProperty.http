@@ -1,0 +1,2 @@
+### GET Property By ID
+GET http://localhost:8080/properties/100
