@@ -14,7 +14,7 @@ export const createProperty = createAsyncThunk(
   'properties/create',
   async (propertyData, thunkApi) => {
     const { token, ...property } = propertyData;
-    console.log('thunkApi', thunkApi);
+    //console.log('thunkApi', thunkApi);
     try {
       return await AxiosService(token).post('/properties', JSON.stringify(property));
     } catch(err) {

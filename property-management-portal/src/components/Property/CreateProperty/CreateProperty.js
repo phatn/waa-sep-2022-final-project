@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect } from 'react';
 import {
   Button,
   Grid,
@@ -7,12 +7,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  FormHelperText,
   Stack,
   Slide,
   Dialog,
   DialogContent,
   DialogActions,
+  LinearProgress,
 } from '@mui/material';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -24,11 +24,11 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 
-import InputCurrencyFormat from 'components/InputCurrencyFormat/InputCurrencyFormat';
-import DialogTitleCustom from 'components/DialogTitleCustom/DialogTitleCustom';
+import { InputCurrencyFormat } from 'components/InputCurrencyFormat/InputCurrencyFormat';
+import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCustom';
 import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
-
+import { AlertDialog } from 'components/AlertDialog/AlertDialog';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -50,18 +50,46 @@ export const CreateProperty = (props) => {
     availableDate: dayjs(),
     pictures: [],
   };
+  const [property, setProperty] = useState(initialProperty);
+  const [propertyType, setPropertyType] = useState('');
+  const [homeType, setHomeType] = useState('');
+  const [alertContent, setAlertContent] = useState({
+    message: '',
+    title: '',
+    onClose: undefined,
+    afterClose: undefined
+  });
+  const [openAlert, setOpenAlert] = useState(false);
 
   const [isOpenForm, setIsOpenForm] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setInterval(() => {
+        setProgress((oldProgress) => {
+          if (oldProgress === 100) {
+            //return 0;
+            closeForm();
+          }
+          const diff = Math.random() * 10;
+          return Math.min(oldProgress + diff, 100);
+        });
+      }, 500);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [loading]);
+
   const openForm = () => {
     setIsOpenForm(true);
   };
   const closeForm = () => {
     setIsOpenForm(false);
   };
-  const [property, setProperty] = useState(initialProperty);
-  const [propertyType, setPropertyType] = useState('');
-  const [homeType, setHomeType] = useState('');
-
   const propertyState = useSelector((state) => state.properties);
   const dispatch = useDispatch();
 
@@ -96,20 +124,41 @@ export const CreateProperty = (props) => {
     setHomeType('');
     setPropertyType('');
   };
+  const validateForm = () => {
+    return false;
+  }
   const handleSave = () => {
-    const saveProperty = {
-      ...property,
-      price: property.price.substring(1),
-      token: '',
-    };
-    dispatch(createProperty(saveProperty))
-      .then(() => {
-        //close dialog
-        closeForm();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (validateForm()) {
+      const price = parseFloat(property.price.substring(1).replace(/,/g, ''));
+      const saveProperty = {
+        ...property,
+        price: price,
+        token: '',
+      };
+      dispatch(createProperty(saveProperty))
+        .then(() => {
+          //close dialog
+          closeForm();
+          setOpenAlert(true);
+          setAlertContent({
+            title: 'Property Create Confirmation',
+            message: 'Property is saved successful!',
+            onClose: () => setOpenAlert(false),
+            //afterClose: closeForm
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          setAlertContent({
+            open: true,
+            title: 'Property Create Confirmation',
+            message: error,
+            onClose: () => setOpenAlert(false)
+          });
+        });
+    } else {
+      setLoading(true);
+    }
   };
 
   return (
@@ -125,6 +174,7 @@ export const CreateProperty = (props) => {
         scroll={'paper'}
         //onClose={closeForm}
       >
+        <LinearProgress variant='determinate' value={progress}></LinearProgress>
         <DialogTitleCustom id='dialog-title' onClose={closeForm} >
           Property Create
         </DialogTitleCustom>
@@ -133,13 +183,15 @@ export const CreateProperty = (props) => {
           <Grid container spacing={3} className='grid'>
             <Grid item xs={12} sm={6}>
               <TextField
+                //error
+                helperText='error'
                 label='Price'
                 variant='standard'
                 type='text'
                 id='price'
                 name='price'
                 fullWidth
-                required
+                //required
                 value={property.price}
                 onChange={handleChange}
                 InputProps={{
@@ -156,6 +208,7 @@ export const CreateProperty = (props) => {
                 value={property.numOfRoom}
                 onChange={handleChange}
                 type='number'
+                min={1}
                 fullWidth
                 required
               />
@@ -248,7 +301,6 @@ export const CreateProperty = (props) => {
                 name='overview'
                 rows={5}
                 aria-label='maximum height'
-                defaultValue={property.overview}
                 value={property.overview}
                 style={{ width: '100%', height: '60px' }}
                 onChange={handleChange}
@@ -287,6 +339,7 @@ export const CreateProperty = (props) => {
                   onChange={handleCapture}
                 />
               </Button>
+              
             </Grid>
           </Grid>
         </DialogContent>
@@ -309,6 +362,13 @@ export const CreateProperty = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <AlertDialog
+        open={openAlert}
+        onClose={() => setOpenAlert(!openAlert)}
+        title={alertContent.title}
+        message={alertContent.message}
+        afterClose={alertContent.onClose ? alertContent.onClose : undefined }
+      />
     </>
   );
 };
