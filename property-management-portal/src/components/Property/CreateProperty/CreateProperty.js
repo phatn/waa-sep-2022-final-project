@@ -30,6 +30,7 @@ import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCusto
 import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
 import { AlertDialog } from 'components/AlertDialog/AlertDialog';
+import { MultiUploader } from 'components/MultiUploader/MultiUploader';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -157,7 +158,7 @@ export const CreateProperty = (props) => {
       [fieldName]: message
     })
   }
-  const validateFrom = () => {
+  const validateForm = () => {
     let flag = true;
     for (const key in property) {
       if (!['location', 'overview', 'availableDate'].includes(key) && property[key] === '') {
@@ -172,7 +173,7 @@ export const CreateProperty = (props) => {
     setFormValid(flag);
   }
   useEffect(() => {
-    validateFrom();
+    validateForm();
   }, [property]);
   
   const handleSave = () => {
@@ -378,10 +379,11 @@ export const CreateProperty = (props) => {
             </Grid>
             <Grid item xs={12}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <InputLabel htmlFor='availableDate'>Available Date</InputLabel>
                 <DatePicker
                   id='availableDate'
                   name='availableDate'
-                  label='Available Date'
+                  //label='Available Date'
                   inputFormat='MM/DD/YYYY'
                   minDate={dayjs('01-01-2022')}
                   value={property.availableDate}
@@ -398,7 +400,12 @@ export const CreateProperty = (props) => {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12}>
-              <Button variant='contained' startIcon={<CloudUploadIcon />}>
+              <MultiUploader
+                label='Upload Pictures'
+                id='pictures'
+                changed={handleCapture}
+              />
+              {/* <Button variant='contained' component='label' startIcon={<CloudUploadIcon />}>
                 Upload Pictures
                 <input
                   hidden
@@ -408,9 +415,9 @@ export const CreateProperty = (props) => {
                   id='pictures'
                   onChange={handleCapture}
                 />
-              </Button>
-              
+              </Button> */}
             </Grid>
+            <Grid item xs={12}></Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
