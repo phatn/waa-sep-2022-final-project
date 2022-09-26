@@ -21,6 +21,13 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto save(PropertyDto property) {
+        System.out.println(property.getPrice());
+        System.out.println(property.getNumOfRoom());
+        System.out.println(property.getPropertyType());
+        System.out.println(property.getHomeType());
+        System.out.println(property.getAvailableDate());
+        System.out.println(property.getLocation());
+        System.out.println(property.getPictures());
         Property result = propertyRepo.save(propertyMapper.toEntity(property));
         return propertyMapper.toDto(result);
     }
