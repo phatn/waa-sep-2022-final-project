@@ -1,14 +1,22 @@
 import './SearchWidget.scss';
-import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 const SearchWidget = () => {
+    const nav = useNavigate();
+
+    const searchHandler = (e) => {
+        e.preventDefault();
+        nav("/property-list");
+    }
+
     return (
         <div className="searchWidget">
             <div className="property-search-header">
                 <h3>Find Your Future Home</h3>
             </div>
             <div className="property-search-body">
-                <form>
+                <form onSubmit={searchHandler}>
                     <div className="row">
                         <div className="col-md-6">
                             <div className="control">

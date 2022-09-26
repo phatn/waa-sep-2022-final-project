@@ -30,13 +30,10 @@ public class Property {
     @Embedded
     private Address location;
 
-
-//    @OneToMany(mappedBy = "property")
-//    private Set<Picture> pictures;
-
     @Convert(converter = SetStringConverter.class)
     private Set<String> pictures;
 
+    @Column(length = 5000)
     private String overview;
 
     private LocalDate availableDate;

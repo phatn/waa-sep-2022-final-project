@@ -2,11 +2,13 @@ import axios from 'axios';
 import Constants from 'Constants';
 
 export const AxiosService = (token, isFile = false) => {
-  const axiosInstance = axios.create();
+  const axiosInstance = axios.create({
+    baseURL: Constants.BASE_URL
+  });
 
   axiosInstance.interceptors.request.use(
     (config) => {
-      const { origin } = new URL(config.url);
+      const { origin } = new URL(config.url, Constants.BASE_URL);
       const allowedOrigin = [Constants.BASE_URL];
 
       if (allowedOrigin.includes(origin)) {
@@ -24,5 +26,6 @@ export const AxiosService = (token, isFile = false) => {
       return Promise.reject(error);
     }
   );
+
   return axiosInstance;
 };

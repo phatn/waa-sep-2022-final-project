@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+
 @SpringBootApplication
 @ConfigurationPropertiesScan("edu.miu.waa.propertymanagementservice.constant")
 @EnableCaching

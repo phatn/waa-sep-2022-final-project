@@ -10,30 +10,29 @@ import {keycloak} from './Keycloak';
 import {PrivateRoute} from 'components/PrivateRoute';
 import {SecuredPage} from 'components/SecuredPage';
 import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
-import {Property} from 'components/Property/Property';
-import Dashboard from 'components/Dashboard/Dashboard';
+import { Property } from 'components/Property/Property';
 
 function App() {
     return (
         <div className="App">
             <ReactKeycloakProvider authClient={keycloak}>
                 <BrowserRouter>
-                    <Header/>
-                    <div className="main-area">
-                        <Routes>
-                            <Route exact path="/" element={<Home/>}/>
+                    <Header />
+                    <Routes>
+                        <Route exact path="/" element={<Home />} />
                             <Route exact path="/dashboard" element={<Dashboard/>}/>
-                            <Route path="/property-detail" element={<PropertyDetail/>}/>
-                            <Route path="/property" element={<Property/>}/>
-                            <Route path="/secured" element={
-                                <PrivateRoute>
-                                    <SecuredPage/>
-                                </PrivateRoute>
-                            }/>
-                            <Route path="*" element={<PageNotFound/>}/>
-                        </Routes>
-                    </div>
-                    <Footer/>
+                        <Route path="/property-list" element={<PropertyList />} />
+                        <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
+                        <Route path="/property" element={<Property />} />
+                        <Route path="/secured" element={
+                            <PrivateRoute>
+                                <SecuredPage />
+                            </PrivateRoute>
+                        } />
+                        <Route path="*" element={<PageNotFound />} />
+
+                    </Routes>
+                    <Footer />
                 </BrowserRouter>
             </ReactKeycloakProvider>
         </div>
