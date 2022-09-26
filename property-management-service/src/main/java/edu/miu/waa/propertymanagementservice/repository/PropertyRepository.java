@@ -13,4 +13,6 @@ import java.util.List;
 public interface PropertyRepository extends CrudRepository<Property, Integer> {
     List<Property> findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListed(
             Collection<PropertyType> propertyTypes, Collection<HomeType> homeTypes, double minPrice, double maxPrice, int minRoomNumber, String street, String city, String zipCode, Boolean listed);
+
+    List<Property> findByPropertyTypeInAndLocation_City(Collection<PropertyType> propertyTypes, String city);
 }

@@ -1,5 +1,5 @@
 import './SearchWidget.scss';
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 const SearchWidget = () => {
     return (
@@ -73,7 +73,7 @@ const SearchWidget = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="control">
-                                <button type="submit">Search Property</button>
+                                <Button type="submit">Search Property</Button>
                             </div>
                         </div>
                     </div>

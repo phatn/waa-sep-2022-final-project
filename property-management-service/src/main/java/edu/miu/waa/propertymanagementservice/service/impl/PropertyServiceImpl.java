@@ -44,15 +44,7 @@ public class PropertyServiceImpl implements PropertyService {
                                     String street, String city, String zipCode,
                                     Boolean listed) {
         // Property type
-        List<PropertyType> enumPropertyTypes = new ArrayList<>();
-        for (PropertyType pt : PropertyType.values()) {
-            if (pt.toString().equalsIgnoreCase(propertyType)) {
-                enumPropertyTypes.add(pt);
-            }
-        }
-        if (enumPropertyTypes.isEmpty()) {
-            enumPropertyTypes.addAll(Arrays.stream(PropertyType.values()).toList());
-        }
+        List<PropertyType> enumPropertyTypes = PreparePropertyType(propertyType);
 
         // Home Type
         List<HomeType> enumHomeTypes = new ArrayList<>();
@@ -86,5 +78,28 @@ public class PropertyServiceImpl implements PropertyService {
         List<Property> properties = propertyRepo.findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListed(
                 enumPropertyTypes, enumHomeTypes, minPrice, maxPrice, minRoomNumber, streetPattern, cityPattern, zipCodePattern, listed);
         return propertyMapper.toListDtos(properties);
+    }
+
+	@Override
+	public List<PropertyDto> report(String propertyType, String city) {
+        List<PropertyType> enumPropertyTypes = PreparePropertyType(propertyType);
+
+        List<Property> properties = propertyRepo.findByPropertyTypeInAndLocation_City(enumPropertyTypes, city);
+
+        return propertyMapper.toListDtos(properties);
+    }
+
+    private List<PropertyType> PreparePropertyType(String propertyType) {
+        List<PropertyType> enumPropertyTypes = new ArrayList<>();
+        for (PropertyType pt : PropertyType.values()) {
+            if (pt.toString().equalsIgnoreCase(propertyType)) {
+                enumPropertyTypes.add(pt);
+            }
+        }
+        if (enumPropertyTypes.isEmpty()) {
+            enumPropertyTypes.addAll(Arrays.stream(PropertyType.values()).toList());
+        }
+
+        return enumPropertyTypes;
     }
 }
