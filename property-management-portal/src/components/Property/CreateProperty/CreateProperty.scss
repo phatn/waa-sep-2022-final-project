@@ -7,3 +7,6 @@ h4 {
 .grid {
   border-bottom: 0;
 }
+p.capitalize::first-letter, p.Mui-error::first-letter {
+  text-transform: capitalize !important;
+}

@@ -35,5 +35,5 @@ aws:
   s3-bucket: "waaproject-bucket"
   region: "us-west-1"
   arn: "arn:aws:s3:::waaproject-bucket"
-  access-key-id: ""
-  secret-access-key: ""
+  access-key-id: "AKIA52GH5C2PD3QLK7CK"
+  secret-access-key: "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"

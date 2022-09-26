@@ -33,4 +33,4 @@ DialogTitleCustom.propTypes = {
   onClose: PropTypes.func.isRequired
 }
 
-export default DialogTitleCustom;
+export { DialogTitleCustom };

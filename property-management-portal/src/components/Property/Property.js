@@ -1,10 +1,6 @@
-import React, { useState, forwardRef } from 'react';
-import {
-  Button
-} from '@mui/material';
+import React from 'react';
 
 import { CreateProperty } from "./CreateProperty/CreateProperty";
-
 
 
 export const Property = (props) => {
