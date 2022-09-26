@@ -5,6 +5,7 @@ import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
 import edu.miu.waa.propertymanagementservice.mapper.PropertyMapper;
+import edu.miu.waa.propertymanagementservice.repository.ApplicationRepository;
 import edu.miu.waa.propertymanagementservice.repository.PropertyRepository;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class PropertyServiceImpl implements PropertyService {
+
 	private final PropertyRepository propertyRepo;
 	private final PropertyMapper propertyMapper;
 

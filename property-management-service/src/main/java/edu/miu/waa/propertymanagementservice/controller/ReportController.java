@@ -1,6 +1,7 @@
 package edu.miu.waa.propertymanagementservice.controller;
 
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
+import edu.miu.waa.propertymanagementservice.service.ApplicationService;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,7 +15,14 @@ import java.util.List;
 @RequestMapping("/report")
 public class ReportController {
 
+	private final ApplicationService applicationService;
 	private final PropertyService propertyService;
+
+	@GetMapping("/application/total")
+	@Cacheable(value = "totalApplication")
+	public long getTotalApplication() {
+		return applicationService.countApplication();
+	}
 
 	@GetMapping()
 	@Cacheable(value = "report", key = "{#propertyType,#homeType,#street,#city,#zipCode,#year}")
