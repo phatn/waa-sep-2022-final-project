@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CssBaseline } from '@mui/material';
 import './index.css';
 
 const container = document.getElementById('root');
@@ -11,9 +12,11 @@ const root = createRoot(container);
 
 root.render(
   /*<React.StrictMode>*/
-    <Provider store={store}>
+  <Provider store={store}>
+    <CssBaseline>
       <App />
-    </Provider>
+    </CssBaseline>
+  </Provider>
   /*</React.StrictMode>*/
 );
 

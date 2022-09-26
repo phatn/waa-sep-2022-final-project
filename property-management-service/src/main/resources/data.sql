@@ -3,7 +3,7 @@ INSERT INTO users(email)
 VALUES
     ('phat@gmail.com'),
     ('thiep@gmail.com'),
-    ('yen@gmail.com'),
+    ('truthblue82@gmail.com'),
     ('phong@gmail.com'),
     ('adam@gmail.com'),
     ('michael@gmail.com');
@@ -100,3 +100,10 @@ VALUES
 
     (230000, 4, 'SELL', 'HOUSE', 'Welcome to Grandview City Lights Spacious 3 bedroom apartment at Grandview City Lights in Los Angeles, experience great living in LOW-INCOME AFFORDABLE HOUSING.', '1219 W 25th St', 'Fairfield', '51551', false, true, CURRENT_DATE, 1,
      'https://photos.zillowstatic.com/fp/94565dbbf813f2fe9c2efdf976f9b401-cc_ft_960.jpg;https://photos.zillowstatic.com/fp/ce901a2820ce401564cce39b31c3520f-cc_ft_960.jpg');
+
+INSERT INTO favorite_properties_users(user_id, property_id)
+VALUES
+    (1,1),
+    (1,2),
+    (2,1),
+    (3,3);
