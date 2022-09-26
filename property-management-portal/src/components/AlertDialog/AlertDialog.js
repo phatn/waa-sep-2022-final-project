@@ -8,9 +8,6 @@ const AlertDialog = (props) => {
 
   const handleClose = () => {
     onClose();
-    // if (typeof afterClose === 'function') {
-    //   afterClose();
-    // }
   }
 
   return (
@@ -38,7 +35,6 @@ AlertDialog.propTypes = {
   title: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  //afterClose: PropTypes.func,  // it's an action after closing this dialog
 }
 
 export { AlertDialog };
