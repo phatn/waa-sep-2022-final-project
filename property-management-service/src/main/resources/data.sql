@@ -58,3 +58,10 @@ VALUES
     ('/picture2', 4),
     ('/picture1', 4),
     ('/picture2', 5);
+
+INSERT INTO favorite_properties_users(user_id, property_id)
+VALUES
+    (1,1),
+    (1,2),
+    (2,1),
+    (3,3);
