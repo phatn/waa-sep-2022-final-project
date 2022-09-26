@@ -1,7 +1,8 @@
 import Keycloak from "keycloak-js";
+import Constants from "./Constants";
 
 export const keycloak = new Keycloak({
-    url: 'http://localhost:9090',
-    realm: 'PropertyPortal',
-    clientId: 'property-management-portal'
-})
+    url: Constants.AUTH_URL,
+    realm: Constants.AUTH_REALM,
+    clientId: Constants.AUTH_CLIENT_ID
+});

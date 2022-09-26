@@ -1,4 +1,5 @@
 import './Footer.scss';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -9,18 +10,18 @@ const Footer = () => {
                         <div className="col-lg-3 col-xs-3 col-sm-6">
                             <div className="single-footer-widget footer-logo-widget">
                                 <div className="footer-logo">
-                                    <a href="/">
+                                    <Link to="/">
                                         <img src="/logo.png" alt="footer logo" />
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="footer-widget-text">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt labore et dolore magna aliqua.</p>
                                     <ul className="footer-social">
-                                        <li><a href="#"><i className="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i className="fa fa-twitter"></i></a></li>
-                                        <li><a href="#"><i className="fa fa-linkedin"></i></a></li>
-                                        <li><a href="#"><i className="fa fa-youtube"></i></a></li>
-                                        <li><a href="#"><i className="fa fa-skype"></i></a></li>
+                                        <li><Link to="#"><i className="fa fa-facebook"></i></Link></li>
+                                        <li><Link to="#"><i className="fa fa-twitter"></i></Link></li>
+                                        <li><Link to="#"><i className="fa fa-linkedin"></i></Link></li>
+                                        <li><Link to="#"><i className="fa fa-youtube"></i></Link></li>
+                                        <li><Link to="#"><i className="fa fa-skype"></i></Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -33,7 +34,7 @@ const Footer = () => {
                                         <i className="fa fa-image"></i>
                                     </div>
                                     <div className="latest-post-footer-right">
-                                        <h4><a href="#">Revealed: How to set goals for you and your team</a></h4>
+                                        <h4><Link to="#">Revealed: How to set goals for you and your team</Link></h4>
                                         <p>Jan 14, 2018</p>
                                     </div>
                                 </div>
@@ -42,7 +43,7 @@ const Footer = () => {
                                         <i className="fa fa-briefcase"></i>
                                     </div>
                                     <div className="latest-post-footer-right">
-                                        <h4><a href="#">Five ways to improve as a business professional!</a></h4>
+                                        <h4><Link to="#">Five ways to improve as a business professional!</Link></h4>
                                         <p>Jan 14, 2018</p>
                                     </div>
                                 </div>
@@ -52,12 +53,12 @@ const Footer = () => {
                             <div className="single-footer-widget">
                                 <h3>main links</h3>
                                 <ul className="quicklinks">
-                                    <li><a href="#"><i className="fa fa-angle-double-right "></i> About maaxen forum</a></li>
-                                    <li><a href="#"><i className="fa fa-angle-double-right "></i> Delivery Information</a></li>
-                                    <li><a href="#"><i className="fa fa-angle-double-right "></i> Terms &amp; Conditions</a></li>
-                                    <li><a href="#"><i className="fa fa-angle-double-right "></i> Team Discussion on maaxen</a></li>
-                                    <li><a href="#"><i className="fa fa-angle-double-right "></i> Contact with an expert</a></li>
-                                    <li><a href="#"><i className="fa fa-angle-double-right "></i> investment pricing table</a></li>
+                                    <li><Link to="/"><i className="fa fa-angle-double-right "></i> About maaxen forum</Link></li>
+                                    <li><Link to="/"><i className="fa fa-angle-double-right "></i> Delivery Information</Link></li>
+                                    <li><Link to="/"><i className="fa fa-angle-double-right "></i> Terms &amp; Conditions</Link></li>
+                                    <li><Link to="/"><i className="fa fa-angle-double-right "></i> Team Discussion on maaxen</Link></li>
+                                    <li><Link to="/"><i className="fa fa-angle-double-right "></i> Contact with an expert</Link></li>
+                                    <li><Link to="/"><i className="fa fa-angle-double-right "></i> investment pricing table</Link></li>
                                 </ul>
                             </div>
                         </div>
