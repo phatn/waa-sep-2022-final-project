@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { NumberFormatBase } from 'react-number-format';
 
-const InputCurrencyFormat = (props) => {
+const InputCurrencyFormat = forwardRef(function InputCurrencyFormat(props, ref){
   const format = (numStr) => {
     if (numStr === '') return '';
     
@@ -12,6 +12,6 @@ const InputCurrencyFormat = (props) => {
     }).format(numStr);
   };
 
-  return <NumberFormatBase {...props} format={format} />;
-}
-export default InputCurrencyFormat;
+  return <NumberFormatBase {...props} format={format} getInputRef={ref} />;
+})
+export { InputCurrencyFormat };
