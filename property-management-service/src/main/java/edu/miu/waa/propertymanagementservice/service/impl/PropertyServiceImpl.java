@@ -44,7 +44,7 @@ public class PropertyServiceImpl implements PropertyService {
         Property property = propertyRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));
         PropertyDto propertyDto = propertyMapper.toDto(property);
-        propertyDto.setPicture(property.getPictures());
+        propertyDto.setPictures(property.getPictures());
         return propertyDto;
     }
 
