@@ -4,6 +4,7 @@ import { AxiosService } from "../../services/AxiosService";
 import Constants from "Constants";
 import "./PropertyList.scss";
 import PropertyList from "./PropertyList";
+import { useSearchParams } from "react-router-dom";
 
 const DEFAULT_IMG = process.env.PUBLIC_URL + "/slider-1.jpeg";
 const HOME_TYPES = [
@@ -26,9 +27,11 @@ const ITEM_PADDING_TOP = 8;
 const MAX_PRICE = 100_000_000;
 
 export default function PropertySearchList(props) {
+    const [urlParams] = useSearchParams();
     const [street, setStreet] = useState('');
     const [city, setCity] = useState('');
     const [zipCode, setZipCode] = useState('');
+    const [locationTxt, setLocationTxt] = useState('');
     const [type, setType] = useState('sell');
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(MAX_PRICE);
@@ -39,11 +42,9 @@ export default function PropertySearchList(props) {
     const [properties, setProperties] = useState([]);
 
     useEffect(() => {
-
+        handleUrlParams();
         initMinMax(SELL);
         setHomeType([...HOME_TYPES]);
-
-        getProperties("/properties/search");
     }, []);
 
     const initMinMax = (type) => {
@@ -91,10 +92,42 @@ export default function PropertySearchList(props) {
         setMaxPricesVal(maxArr);
     }
 
+    // get query params from url
+    const handleUrlParams = () => {
+        let initLocationTxt = "";
+        const searchParams = new URLSearchParams();
+        let street = urlParams.get("street");
+        if (street && street !== "") {
+            setStreet(street);
+            searchParams.append("street", street);
+            initLocationTxt += street;
+        }
+        initLocationTxt += ",";
+        let city = urlParams.get("city");
+        if (city && city !== "") {
+            setCity(city);
+            searchParams.append("city", city);
+            initLocationTxt += city;
+        }
+        initLocationTxt += ",";
+        let zipCode = urlParams.get("zipCode");
+        if (zipCode && zipCode !== "") {
+            setZipCode(zipCode);
+            searchParams.append("zipCode", zipCode);
+            initLocationTxt += zipCode;
+        }
+
+        if (initLocationTxt !== ",,") {
+            setLocationTxt(initLocationTxt);
+        }
+        let url = "/properties/search?" + searchParams.toString();
+        getProperties(url);
+    }
+
     // location: street, city, zipcode
     const locationChanged = (e) => {
-        console.log(e.target.value);
         let txt = e.target.value;
+        setLocationTxt(txt);
         let arr = txt.split(",");
         if (arr.length > 0) {
             setStreet(arr[0].trim());
@@ -270,7 +303,8 @@ export default function PropertySearchList(props) {
                     <TextField fullWidth placeholder="Address, City, Zipcode"
                         id="locationInput"
                         variant="outlined"
-                        onChange={locationChanged}>
+                        onChange={locationChanged}
+                        value={locationTxt}>
                     </TextField>
                 </Grid>
             </Grid>
