@@ -115,7 +115,14 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyMapper.toListDtos(properties);
     }
 
-    private List<PropertyType> PreparePropertyType(String propertyType) {
+	@Override
+	public List<PropertyDto> findFirst10() {
+        List<Property> properties = propertyRepo.findFirst10ByOrderByCreatedDateDesc();
+
+        return propertyMapper.toListDtos(properties);
+	}
+
+	private List<PropertyType> PreparePropertyType(String propertyType) {
         List<PropertyType> enumPropertyTypes = new ArrayList<>();
 
         for (PropertyType pt : PropertyType.values()) {

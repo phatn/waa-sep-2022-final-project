@@ -1,5 +1,5 @@
 import './SearchWidget.scss';
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useNavigate } from 'react-router';
 
 const SearchWidget = () => {

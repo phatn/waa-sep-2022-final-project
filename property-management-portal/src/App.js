@@ -1,16 +1,18 @@
-import React from 'react';
-import './App.css';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import Dashboard from 'components/Dashboard/Dashboard';
+import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Home from 'components/Home/Home';
 import PageNotFound from 'components/PageNotFound/PageNotFound';
-import Footer from 'components/Footer/Footer';
-import {ReactKeycloakProvider} from '@react-keycloak/web';
-import {keycloak} from './Keycloak';
-import {PrivateRoute} from 'components/PrivateRoute';
-import {SecuredPage} from 'components/SecuredPage';
-import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
+import { PrivateRoute } from 'components/PrivateRoute';
 import { Property } from 'components/Property/Property';
+import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
+import PropertyList from 'components/PropertyList/PropertyList';
+import { SecuredPage } from 'components/SecuredPage';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
+import { keycloak } from './Keycloak';
 
 function App() {
     return (
@@ -20,7 +22,7 @@ function App() {
                     <Header />
                     <Routes>
                         <Route exact path="/" element={<Home />} />
-                            <Route exact path="/dashboard" element={<Dashboard/>}/>
+                        <Route exact path="/dashboard" element={<Dashboard />} />
                         <Route path="/property-list" element={<PropertyList />} />
                         <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
@@ -30,7 +32,6 @@ function App() {
                             </PrivateRoute>
                         } />
                         <Route path="*" element={<PageNotFound />} />
-
                     </Routes>
                     <Footer />
                 </BrowserRouter>

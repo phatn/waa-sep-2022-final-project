@@ -16,4 +16,6 @@ public interface PropertyRepository extends CrudRepository<Property, Integer> {
 
     List<Property> findByPropertyTypeInAndHomeTypeInAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCase(
             Collection<PropertyType> propertyTypes, Collection<HomeType> homeTypes, String street, String city, String zipCode);
+
+	List<Property> findFirst10ByOrderByCreatedDateDesc();
 }

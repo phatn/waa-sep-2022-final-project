@@ -18,4 +18,6 @@ public interface PropertyService {
                              Boolean listed);
 
     List<PropertyDto> report(String propertyType, List<String> homeType, String street, String city, String zipCode);
+
+	List<PropertyDto> findFirst10();
 }

@@ -50,4 +50,5 @@ public class Property {
 
     private String deletedBy;
 
+    private LocalDate createdDate;
 }
