@@ -12,18 +12,31 @@ import { SecuredPage } from 'components/SecuredPage';
 import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
 import { Property } from 'components/Property/Property';
 import PropertySearchList from './components/PropertyList/PropertySearchList';
+import { storeToken } from "./Utils";
+
 
 function App() {
+
+    const handleOnEvent = async (event, error) => {
+        console.log(event)
+        if (event === 'onAuthSuccess') {
+            if (keycloak.authenticated) {
+                storeToken(keycloak.token);
+            }
+        }
+    }
+
     return (
         <div className="App">
-            <ReactKeycloakProvider authClient={keycloak}>
+            <ReactKeycloakProvider authClient={keycloak} onEvent={handleOnEvent}>
                 <BrowserRouter>
                     <Header />
                     <Routes>
                         <Route exact path="/" element={<Home />} />
                         <Route path="/property-list" element={<PropertySearchList />} />
-                        <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
+                        <Route path="/property-detail/:id" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
+
                         <Route path="/secured" element={
                             <PrivateRoute>
                                 <SecuredPage />
