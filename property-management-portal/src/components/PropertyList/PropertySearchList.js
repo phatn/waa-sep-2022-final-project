@@ -97,13 +97,13 @@ export default function PropertySearchList(props) {
         let txt = e.target.value;
         let arr = txt.split(",");
         if (arr.length > 0) {
-            setStreet(arr[0]);
+            setStreet(arr[0].trim());
         }
         if (arr.length > 1) {
-            setCity(arr[1]);
+            setCity(arr[1].trim());
         }
         if (arr.length > 2) {
-            setZipCode(arr[2]);
+            setZipCode(arr[2].trim());
         }
     }
 

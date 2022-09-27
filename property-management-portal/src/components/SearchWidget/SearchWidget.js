@@ -1,13 +1,49 @@
 import './SearchWidget.scss';
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
+import { useState } from "react";
 import { useNavigate } from 'react-router';
 
 const SearchWidget = () => {
     const nav = useNavigate();
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [zipCode, setZipCode] = useState('');
 
-    const searchHandler = (e) => {
+    // location: street, city, zipcode
+    const locationChanged = (e) => {
+        let txt = e.target.value;
+        let arr = txt.split(",");
+        if (arr.length > 0) {
+            setStreet(arr[0].trim());
+        }
+        if (arr.length > 1) {
+            setCity(arr[1].trim());
+        }
+        if (arr.length > 2) {
+            setZipCode(arr[2].trim());
+        }
+    }
+
+    const locationKeyDowned = (e) => {
+        if (e.keyCode === 13) {
+            searchClicked(e);
+        }
+    }
+
+    const searchClicked = (e) => {
         e.preventDefault();
-        nav("/property-list");
+        const searchParams = new URLSearchParams();
+        if (street !== "") {
+            searchParams.append("street", street);
+        }
+        if (city !== "") {
+            searchParams.append("city", city);
+        }
+        if (zipCode !== "") {
+            searchParams.append("zipCode", zipCode);
+        }
+        let url = "/property-list?" + searchParams.toString();
+        nav(url);
     }
 
     return (
@@ -15,77 +51,21 @@ const SearchWidget = () => {
             <div className="property-search-header">
                 <h3>Find Your Future Home</h3>
             </div>
-            <div className="property-search-body">
-                <form onSubmit={searchHandler}>
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div className="control">
-                                <FormControl fullWidth>
-                                    <TextField id="outlined-basic" label="Name" variant="outlined" size={'small'} />
-                                </FormControl>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="control">
-                                <FormControl fullWidth>
-                                    <TextField id="outlined-basic" label="Location" variant="outlined" size={'small'} />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-6">
-                            <FormControl fullWidth size={'small'}>
-                                <InputLabel>Age</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={`10`}
-                                    label="Age"
-                                // onChange={handleChange}
-                                >
-                                    <MenuItem value={`10`}>Ten</MenuItem>
-                                    <MenuItem value={`20`}>Twenty</MenuItem>
-                                    <MenuItem value={`10`}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className="col-md-6">
-                            <FormControl fullWidth size={'small'}>
-                                <InputLabel>Age 2</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={`10`}
-                                    label="Age"
-                                // onChange={handleChange}
-                                >
-                                    <MenuItem value={`10`}>Ten</MenuItem>
-                                    <MenuItem value={`20`}>Twenty</MenuItem>
-                                    <MenuItem value={`30`}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="checkbox-property">
-                                <FormControlLabel control={<Checkbox />} label="Air Conditioning" />
-                                <FormControlLabel control={<Checkbox />} label="Swimming Pool" />
-                                <FormControlLabel control={<Checkbox />} label="Gym" />
-                                <FormControlLabel control={<Checkbox />} label="Central Heating" />
-                                <FormControlLabel control={<Checkbox />} label="Laundry Room" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="control">
-                                <button type="submit">Search Property</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            <div className="container property-search-body">
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={10} sx={{ mb: 2, minWidth: 300 }}>
+                        <TextField fullWidth placeholder="Address, City, Zipcode"
+                            id="locationInput"
+                            variant="outlined"
+                            onChange={locationChanged}
+                            onKeyDown={locationKeyDowned}>
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={2} md={2} sx={{ mb: 2, minWidth: 10 }}>
+                        <Button variant="contained" sx={{ mt: 2 }}
+                            onClick={searchClicked}>Search</Button>
+                    </Grid>
+                </Grid>
             </div>
         </div>
     );
