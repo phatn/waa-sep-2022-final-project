@@ -1,3 +1,4 @@
+import { getToken } from '@/Utils';
 import axios from 'axios';
 import Constants from 'Constants';
 
@@ -9,9 +10,10 @@ axiosInstance.interceptors.request.use(
     (config) => {
         const { origin } = new URL(config.url, Constants.BASE_URL);
         const allowedOrigin = [Constants.BASE_URL];
+        const token = getToken();
 
-        if (allowedOrigin.includes(origin)) {
-            config.headers = { Authorization: `Bearer ${123}` };
+        if (token && allowedOrigin.includes(origin)) {
+            config.headers = { Authorization: `Bearer ${token}` };
         }
 
         return config;
