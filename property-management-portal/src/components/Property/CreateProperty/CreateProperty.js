@@ -19,7 +19,6 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ResetIcon from '@mui/icons-material/RestartAlt';
 import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
@@ -29,8 +28,8 @@ import { InputCurrencyFormat } from 'components/InputCurrencyFormat/InputCurrenc
 import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCustom';
 import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
-import { AlertDialog } from 'components/AlertDialog/AlertDialog';
 import { MultiUploader } from 'components/MultiUploader/MultiUploader';
+import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -66,7 +65,6 @@ export const CreateProperty = (props) => {
   const [homeType, setHomeType] = useState('');
   const [alertContent, setAlertContent] = useState({
     message: '',
-    title: '',
     onClose: undefined
   });
   const [validProperty, setValidProperty] = useState(initValidProperty);
@@ -76,11 +74,14 @@ export const CreateProperty = (props) => {
   const [loading, setLoading] = useState(false);
   const [formValid, setFormValid] = useState(false);
 
+  const [selectedPictures, setSelectedPictures] = useState([]);
+
   useEffect(() => {
     if (loading) {
       const timer = setInterval(() => {
         setProgress((oldProgress) => {
           if (oldProgress === 100) {
+            setProgress(0);
             closeForm();
           }
           const diff = Math.random() * 10;
@@ -101,7 +102,7 @@ export const CreateProperty = (props) => {
     setIsOpenForm(false);
   };
 
-  const propertyState = useSelector((state) => state.properties);
+  //const propertyState = useSelector((state) => state.properties);
   const dispatch = useDispatch();
 
   const handleChange = (evt) => {
@@ -129,8 +130,9 @@ export const CreateProperty = (props) => {
     validateField(evt.target.name, evt.target.value);
   };
 
-  const handleCapture = () => {
+  const handleCapture = (evt) => {
     console.log('capture');
+    //setSelectedPictures(selectedPictures.push(evt.target.file))
   };
 
   const handleReset = () => {
@@ -172,6 +174,7 @@ export const CreateProperty = (props) => {
     }
     setFormValid(flag);
   }
+
   useEffect(() => {
     validateForm();
   }, [property]);
@@ -192,7 +195,7 @@ export const CreateProperty = (props) => {
           closeForm();
           setOpenAlert(true);
           setAlertContent({
-            title: 'Property Create Confirmation',
+            open: true,
             message: 'Property is saved successful!',
             onClose: () => setOpenAlert(false)
           });
@@ -200,13 +203,12 @@ export const CreateProperty = (props) => {
         .catch((error) => {
           setAlertContent({
             open: true,
-            title: 'Property Create Confirmation',
             message: error,
             onClose: () => setOpenAlert(false)
           });
         });
     } else {
-      //validation
+      //validation false
       setLoading(false);
     }
   };
@@ -383,7 +385,6 @@ export const CreateProperty = (props) => {
                 <DatePicker
                   id='availableDate'
                   name='availableDate'
-                  //label='Available Date'
                   inputFormat='MM/DD/YYYY'
                   minDate={dayjs('01-01-2022')}
                   value={property.availableDate}
@@ -401,21 +402,12 @@ export const CreateProperty = (props) => {
             </Grid>
             <Grid item xs={12}>
               <MultiUploader
-                label='Upload Pictures'
+                labelSelect='Select Pictures'
+                labelUpload='Upload'
                 id='pictures'
-                changed={handleCapture}
+                pictures={selectedPictures}
+                picker={setSelectedPictures}
               />
-              {/* <Button variant='contained' component='label' startIcon={<CloudUploadIcon />}>
-                Upload Pictures
-                <input
-                  hidden
-                  accept='image/*'
-                  multiple
-                  type='file'
-                  id='pictures'
-                  onChange={handleCapture}
-                />
-              </Button> */}
             </Grid>
             <Grid item xs={12}></Grid>
           </Grid>
@@ -440,12 +432,14 @@ export const CreateProperty = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <AlertDialog
+      <SnackbarCustom
+        vertical='top'
+        horizontal='right'
         open={openAlert}
-        onClose={() => setOpenAlert(!openAlert)}
-        title={alertContent.title}
-        message={alertContent.message}
-      />
+        autoHideDuration={6000}
+        severity="success"
+        closed={() => setOpenAlert(!openAlert)}
+      >{alertContent.message}</SnackbarCustom>
     </>
   );
 };

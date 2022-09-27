@@ -1,11 +1,11 @@
 import axios from 'axios';
 import Constants from 'Constants';
 
-export const AxiosService = (token, isFile = false) => {
-  const axiosInstance = axios.create({
-    baseURL: Constants.BASE_URL
-  });
+const axiosInstance = axios.create({
+  baseURL: Constants.BASE_URL
+});
 
+export const AxiosService = (token, isFile = false) => {
   axiosInstance.interceptors.request.use(
     (config) => {
       const { origin } = new URL(config.url, Constants.BASE_URL);

@@ -30,6 +30,7 @@ public class PropertyServiceImpl implements PropertyService {
         System.out.println(property.getAvailableDate());
         System.out.println(property.getLocation());
         System.out.println(property.getPictures());
+
         Property result = propertyRepo.save(propertyMapper.toEntity(property));
         return propertyMapper.toDto(result);
     }

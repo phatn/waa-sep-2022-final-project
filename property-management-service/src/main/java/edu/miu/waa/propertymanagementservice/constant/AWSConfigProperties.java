@@ -15,4 +15,5 @@ public class AWSConfigProperties {
     private String arn;
     private String accessKeyId;
     private String secretAccessKey;
+    private String baseUrl;
 }
