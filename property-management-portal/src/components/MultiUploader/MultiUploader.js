@@ -9,7 +9,7 @@ const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 const initChip = [
-  { key: 0, label: 'Angular', main: false },
+  { key: 0, label: 'Angular', main: true },
   { key: 1, label: 'jQuery', main: false },
   { key: 2, label: 'Polymer', main: false },
   { key: 3, label: 'React', main: false },
@@ -17,9 +17,9 @@ const initChip = [
 ];
 
 export const MultiUploader = (props) => {
-  const { id, labelSelect, labelUpload, picker, pictures, ...other  } = props;
+  const { id, label, picker, pictures, ...other  } = props;
   //const [isUploading, setUploading] = useState(false);
-  const [selectedPictures, setSelectedPictures] = useState(initChip);
+  const [selectedPictures, setSelectedPictures] = useState([]);
 
   const onChange = async (evt) => {
     //let formData = new FormData();
@@ -57,8 +57,8 @@ export const MultiUploader = (props) => {
 
   return (
     <>
-      <Button variant='contained' component='label' startIcon={<FileUploadIcon />} {...other}>
-        {labelSelect}
+      <Button variant='contained' component='label' startIcon={<CloudUploadIcon />} {...other}>
+        {label}
         <input
           hidden
           accept=".jpg, .png, .jpeg, .webp"
@@ -68,28 +68,30 @@ export const MultiUploader = (props) => {
           onChange={handleCapture}
         />
       </Button>
+      {
+        selectedPictures.length > 0 &&
+        <Card spacing={2}  className='picture-capture' id='pictureContent'>
+          {
+            selectedPictures.map(pic => (
+              <ListItem
+                key={pic.key}
+              >
+                <Chip
+                  variant="outlined"
+                  label={pic.label}
+                  onDelete={() => handleDelete(pic)}
+                  onClick={() => selectMainItem(pic)}
+                  color={pic.main === true ? 'primary' : undefined}
+                />
+              </ListItem>
+            ))
+          }
+        </Card>
+      }
       
-      <Card spacing={2}  className='picture-capture' id='pictureContent'>
-        {
-          selectedPictures.length &&
-          selectedPictures.map(pic => (
-            <ListItem
-              key={pic.key}
-            >
-              <Chip
-                variant="outlined"
-                label={pic.label}
-                onDelete={() => handleDelete(pic)}
-                onClick={() => selectMainItem(pic)}
-                color={pic.main === true ? 'primary' : undefined}
-              />
-            </ListItem>
-          ))
-        }
-      </Card>
-      <Button variant='contained' startIcon={<CloudUploadIcon />}>
+      {/* <Button variant='contained' startIcon={<CloudUploadIcon />}>
         {labelUpload}
-      </Button>
+      </Button> */}
     </>
   )
 }

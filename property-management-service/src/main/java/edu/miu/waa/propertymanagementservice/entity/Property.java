@@ -31,6 +31,7 @@ public class Property {
     private Address location;
 
     @Convert(converter = SetStringConverter.class)
+    @Column(length = 5000)
     private Set<String> pictures;
 
     @Column(length = 5000)

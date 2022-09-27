@@ -1,5 +1,6 @@
 package edu.miu.waa.propertymanagementservice.service.impl;
 
+import edu.miu.waa.propertymanagementservice.constant.AWSConfigProperties;
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,8 @@ import java.util.*;
 public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepo;
     private final PropertyMapper propertyMapper;
+    private final S3FileServiceImpl s3FileService;
+    private final AWSConfigProperties configAWS;
 
     @Override
     public PropertyDto save(PropertyDto property) {
@@ -29,10 +33,28 @@ public class PropertyServiceImpl implements PropertyService {
         System.out.println(property.getHomeType());
         System.out.println(property.getAvailableDate());
         System.out.println(property.getLocation());
-        System.out.println(property.getPictures());
+
+        Set<String> pictureNames = property.getPictures();
+        System.out.println(pictureNames);
+
+
+        Set<String> pictureUrls = s3FileService.getPresignedUrls(pictureNames);
+        System.out.println(pictureUrls);
+
+        String awsBaseUrl = configAWS.getBaseUrl();
+        Set<String> basePictureUrls = pictureNames.stream()
+                .map(name -> {
+                    return awsBaseUrl + "/" + name;
+                }).collect(Collectors.toSet());
+
+        System.out.println(basePictureUrls);
+
+        property.setPictures(basePictureUrls);
 
         Property result = propertyRepo.save(propertyMapper.toEntity(property));
-        return propertyMapper.toDto(result);
+        PropertyDto propertyDto = propertyMapper.toDto(result);
+        propertyDto.setPresignPictures(pictureUrls);
+        return propertyDto;
     }
 
     @Override

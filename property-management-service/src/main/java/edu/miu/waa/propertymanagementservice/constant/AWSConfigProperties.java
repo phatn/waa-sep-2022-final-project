@@ -12,8 +12,5 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 public class AWSConfigProperties {
     private String s3Bucket;
     private String region;
-    private String arn;
-    private String accessKeyId;
-    private String secretAccessKey;
     private String baseUrl;
 }

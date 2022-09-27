@@ -33,10 +33,11 @@ public class S3FileServiceImpl implements S3FileService {
                     .bucket(bucketName)
                     .key(keyName)
                     .contentType("image/*")
+                    //expire ?
                     .build();
 
             PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(5))
+                    .signatureDuration(Duration.ofMinutes(10))
                     .putObjectRequest(objRequest)
                     .build();
 

@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogActions,
   LinearProgress,
+  Card, styled, Chip
 } from '@mui/material';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -30,12 +31,15 @@ import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
 import { MultiUploader } from 'components/MultiUploader/MultiUploader';
 import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction='down' ref={ref} {...props} />;
 });
-
+const ListItem = styled('li')(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 export const CreateProperty = (props) => {
   const initialProperty = {
     price: '',
@@ -63,10 +67,7 @@ export const CreateProperty = (props) => {
   const [property, setProperty] = useState(initialProperty);
   const [propertyType, setPropertyType] = useState('');
   const [homeType, setHomeType] = useState('');
-  const [alertContent, setAlertContent] = useState({
-    message: '',
-    onClose: undefined
-  });
+  const [alertContent, setAlertContent] = useState('');
   const [validProperty, setValidProperty] = useState(initValidProperty);
   const [openAlert, setOpenAlert] = useState(false);
   const [isOpenForm, setIsOpenForm] = useState(false);
@@ -75,6 +76,7 @@ export const CreateProperty = (props) => {
   const [formValid, setFormValid] = useState(false);
 
   const [selectedPictures, setSelectedPictures] = useState([]);
+  const [pictureChips, setPictureChips] = useState([]);
 
   useEffect(() => {
     if (loading) {
@@ -102,7 +104,7 @@ export const CreateProperty = (props) => {
     setIsOpenForm(false);
   };
 
-  //const propertyState = useSelector((state) => state.properties);
+  //const propertyState = useSelector((state) => state.property);
   const dispatch = useDispatch();
 
   const handleChange = (evt) => {
@@ -132,8 +134,46 @@ export const CreateProperty = (props) => {
 
   const handleCapture = (evt) => {
     console.log('capture');
-    //setSelectedPictures(selectedPictures.push(evt.target.file))
+    //const selectedFiles = Array.prototype.slice.call(evt.target.files);
+    const selectedFile = evt.target.files[0];
+    console.log(selectedFile);
+    //{ key: 0, label: 'Angular', main: true },
+    const length = selectedPictures.length;
+    const newPictureChip = { key: length + 1, label: selectedFile.name, main: length === 0 ? true : false };
+    setPictureChips((prevChips) => [...prevChips, newPictureChip]);
+    setSelectedPictures((prevSeletectPics) => [...prevSeletectPics, selectedFile]);
+    //evt.target.files[0]
+    //[{key:1, label: 'filename', ...}]
+    //setSelectedPictures((old) => [...old, {key: selectedPictures.length, label: selectedFiles.name}]);
+    // if (typeof picker === 'function') {
+    //   picker(pictures.push(evt.target.files))
+    // }
   };
+
+  const handleDelete = (deletedPicture) => {
+    const idx = deletedPicture.key;
+    setPictureChips(prev => prev.filter(item => item.key !== deletedPicture.key));
+    setSelectedPictures((prevSelectedPics) => [...prevSelectedPics.slice(0, idx - 1), ...prevSelectedPics.slice(idx)]);
+  };
+
+  const selectMainItem = (selectedPicture) => {
+    const idxMain = selectedPicture.key;
+    const nameMain = selectedPicture.label;
+    setPictureChips(prevChips => {
+      return prevChips.map(item => {
+        if (item.key === idxMain) {
+          item.main = true;
+        } else {
+          item.main = false;
+        }
+        return item;
+      });
+    });
+    
+    selectedPictures.sort(function (x, y) { return x.name === nameMain ? -1 : y.name === nameMain ? 1 : 0; });
+    
+    console.log('new sort', selectedPictures);
+  }
 
   const handleReset = () => {
     setProperty(initialProperty);
@@ -160,6 +200,7 @@ export const CreateProperty = (props) => {
       [fieldName]: message
     })
   }
+
   const validateForm = () => {
     let flag = true;
     for (const key in property) {
@@ -189,23 +230,20 @@ export const CreateProperty = (props) => {
         token: '',
       };
       dispatch(createProperty(saveProperty))
-        .then(() => {
+        .then(async(response) => {
+          //put images to aws s3
+          const presignUrls = response.presignPictures;
+          await presignUrls.map(url => {
+            //
+          })
           //close dialog
           setLoading(false);
           closeForm();
           setOpenAlert(true);
-          setAlertContent({
-            open: true,
-            message: 'Property is saved successful!',
-            onClose: () => setOpenAlert(false)
-          });
+          setAlertContent('Property is saved successful!');
         })
         .catch((error) => {
-          setAlertContent({
-            open: true,
-            message: error,
-            onClose: () => setOpenAlert(false)
-          });
+          setAlertContent(error);
         });
     } else {
       //validation false
@@ -401,13 +439,44 @@ export const CreateProperty = (props) => {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12}>
-              <MultiUploader
-                labelSelect='Select Pictures'
-                labelUpload='Upload'
+              {/* <MultiUploader
+                label='Upload Pictures'
                 id='pictures'
                 pictures={selectedPictures}
                 picker={setSelectedPictures}
-              />
+              /> */}
+              <Button variant='contained' component='label' startIcon={<CloudUploadIcon />}>
+                Upload Pictures
+                <input
+                  hidden
+                  accept=".jpg, .png, .jpeg, .webp"
+                  multiple
+                  type='file'
+                  id='pictures'
+                  onChange={handleCapture}
+                />
+              </Button>
+              {
+                selectedPictures.length > 0 && pictureChips.length > 0 &&
+                <Card spacing={2}  className='picture-capture' id='pictureContent'>
+                  {
+                    pictureChips.map(pic => (
+                      <ListItem
+                        key={pic.key}
+                      >
+                        <Chip
+                          variant="outlined"
+                          label={pic.label}
+                          onDelete={() => handleDelete(pic)}
+                          onClick={() => selectMainItem(pic)}
+                          color={pic.main === true ? 'primary' : undefined}
+                        />
+                      </ListItem>
+                    ))
+                  }
+                </Card>
+              }
+              
             </Grid>
             <Grid item xs={12}></Grid>
           </Grid>
@@ -439,7 +508,7 @@ export const CreateProperty = (props) => {
         autoHideDuration={6000}
         severity="success"
         closed={() => setOpenAlert(!openAlert)}
-      >{alertContent.message}</SnackbarCustom>
+      >{alertContent}</SnackbarCustom>
     </>
   );
 };
