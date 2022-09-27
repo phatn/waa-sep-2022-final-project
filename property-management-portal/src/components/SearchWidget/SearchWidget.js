@@ -52,7 +52,7 @@ const SearchWidget = () => {
                 <h3>Find Your Future Home</h3>
             </div>
             <Grid container padding={2}>
-                <Grid item xs={12} sx={{mb: 2, minWidth: 300}}>
+                <Grid item xs={12} sx={{mb: 2}}>
                     <TextField
                         fullWidth
                         placeholder="Address, City, Zipcode"
