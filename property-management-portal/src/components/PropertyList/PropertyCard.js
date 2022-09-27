@@ -16,7 +16,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function PropertyCard(props) {
-    console.log(props);
+    // console.log(props);
 
     const [expanded, setExpanded] = useState(false);
 
