@@ -11,7 +11,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private final ApplicationRepository applicationRepository;
 
 	@Override
-	public long countApplication() {
+	public long getTotalApplication() {
 		return applicationRepository.count();
 	}
 }

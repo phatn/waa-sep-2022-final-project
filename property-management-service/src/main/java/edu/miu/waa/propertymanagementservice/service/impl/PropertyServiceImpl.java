@@ -122,6 +122,16 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyMapper.toListDtos(properties);
 	}
 
+    @Override
+    public long getSumSellTypeProperties() {
+        return propertyRepo.getSumSellTypeProperties();
+    }
+
+    @Override
+    public long getSumRentTypeProperties() {
+        return propertyRepo.getSumRentTypeProperties();
+    }
+
 	private List<PropertyType> PreparePropertyType(String propertyType) {
         List<PropertyType> enumPropertyTypes = new ArrayList<>();
 

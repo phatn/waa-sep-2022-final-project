@@ -1,17 +1,18 @@
-import React from 'react';
-import './App.css';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import Dashboard from 'components/Dashboard/Dashboard';
+import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from 'components/Home/Home';
 import PageNotFound from 'components/PageNotFound/PageNotFound';
-import Footer from 'components/Footer/Footer';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import { keycloak } from './Keycloak';
 import { PrivateRoute } from 'components/PrivateRoute';
-import { SecuredPage } from 'components/SecuredPage';
-import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
 import { Property } from 'components/Property/Property';
+import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
+import { SecuredPage } from 'components/SecuredPage';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
 import PropertySearchList from './components/PropertyList/PropertySearchList';
+import { keycloak } from './Keycloak';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Header />
                     <Routes>
                         <Route exact path="/" element={<Home />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/property-list" element={<PropertySearchList />} />
                         <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />

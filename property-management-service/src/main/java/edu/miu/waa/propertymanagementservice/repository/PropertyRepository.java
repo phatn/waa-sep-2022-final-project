@@ -3,6 +3,7 @@ package edu.miu.waa.propertymanagementservice.repository;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,10 @@ public interface PropertyRepository extends CrudRepository<Property, Integer> {
             Collection<PropertyType> propertyTypes, Collection<HomeType> homeTypes, String street, String city, String zipCode);
 
 	List<Property> findFirst10ByOrderByCreatedDateDesc();
+
+	@Query("SELECT SUM(price) FROM Property WHERE propertyType = 'SELL'")
+	long getSumSellTypeProperties();
+
+	@Query("SELECT SUM(price) FROM Property WHERE propertyType = 'RENT'")
+	long getSumRentTypeProperties();
 }

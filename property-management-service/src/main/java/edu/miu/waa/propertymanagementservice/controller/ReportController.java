@@ -30,7 +30,19 @@ public class ReportController {
 	@GetMapping("/applications/total")
 	@Cacheable(value = "totalApplication")
 	public long getTotalApplication() {
-		return applicationService.countApplication();
+		return applicationService.getTotalApplication();
+	}
+
+	@GetMapping("/properties/sumSellTypes")
+	@Cacheable(value = "sumSellTypeProperties")
+	public long getSumSellTypeProperties() {
+		return propertyService.getSumSellTypeProperties();
+	}
+
+	@GetMapping("/properties/sumRentType")
+	@Cacheable(value = "sumRentTypeProperties")
+	public long getSumRentTypeProperties() {
+		return propertyService.getSumRentTypeProperties();
 	}
 
 	@GetMapping("/properties/latest")

@@ -1,50 +1,98 @@
-import React from 'react';
+import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import ReactEcharts from 'echarts-for-react';
-import { Button, Card, CardActions, CardContent, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
-
+import React, { useEffect, useState } from 'react';
+import { NumericFormat } from 'react-number-format';
+import { useDispatch, useSelector } from 'react-redux';
+import { get10LatestProperties, getSumRentTypeProperties, getSumSellTypeProperties, getTotalApplications } from 'services/ReportService';
 import './Dashboard.scss';
 
 const Dashboard = () => {
+    const dispatch = useDispatch();
+    const totalApplications = useSelector((state) => state.report.totalApplications);
+    const sumSellTypeProperties = useSelector((state) => state.report.sumSellTypeProperties);
+    const sumRentTypeProperties = useSelector((state) => state.report.sumRentTypeProperties);
+    const tenLatestProperties = useSelector((state) => state.report.tenLatestProperties);
+
+    const [tenLatestPropertiesChartOption, setTenLatestPropertiesChartOption] = useState({});
+
+    useEffect(() => {
+        dispatch(getTotalApplications());
+        dispatch(getSumSellTypeProperties());
+        dispatch(getSumRentTypeProperties());
+        dispatch(get10LatestProperties());
+    }, [dispatch]);
+
     const option = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        title: {
+            text: 'Referer of a Website',
+            subtext: 'Fake Data',
+            left: 'center'
         },
-        yAxis: {
-            type: 'value'
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
         },
         series: [
             {
-                data: [120, 200, 150, 80, 70, 110, 130],
-                type: 'bar'
+                name: 'Access From',
+                type: 'pie',
+                radius: '50%',
+                data: [
+                    { value: 1048, name: 'Search Engine' },
+                    { value: 735, name: 'Direct' },
+                    { value: 580, name: 'Email' },
+                    { value: 484, name: 'Union Ads' },
+                    { value: 300, name: 'Video Ads' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
             }
         ]
     };
+    useEffect(() => {
+        if (tenLatestProperties) {
+            const data = tenLatestProperties.reduce((p, c) =>                       {
+                const city = c.location.city;
 
-    const [month, setMonth] = React.useState(0);
+                if (!p.hasOwnProperty(city)) {
+                    p[city] = 0;
+                }
 
-    const onMonthChange = (event) => {
-        setMonth(event.target.value);
-    };
+                p[city]++;
+
+                return p;
+            }, {});
+
+            console.log(data);
+            setTenLatestPropertiesChartOption({
+                xAxis: {
+                    type: 'category',
+                    data: Object.keys(data)
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: Object.values(data),
+                        type: 'bar'
+                    }
+                ]
+            })
+        }
+    }, [tenLatestProperties]);
 
     return (
         <div className="container dashboard">
             <h2>Dashboard</h2>
-            <FormControl sx={{m: 1, minWidth: 120}}>
-                <InputLabel id="demo-simple-select-helper-label">Month</InputLabel>
-                <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    value={month}
-                    label="Month"
-                    onChange={onMonthChange}
-                >
-                    <MenuItem value={0}> <b>All</b> </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
             <div className="row">
                 <div className="col-md-2">
                     <div className="row">
@@ -55,36 +103,13 @@ const Dashboard = () => {
                                         Applications
                                     </Typography>
                                     <Typography variant="h5" component="div">
-                                        204
+                                        {totalApplications}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small">Learn More</Button>
                                 </CardActions>
                             </Card>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-2">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <Card variant="outlined" className="card">
-                                <CardContent>
-                                    <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                                        Rent
-                                    </Typography>
-                                    <Typography variant="h5" component="div">
-                                        $51M
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button size="small">Learn More</Button>
-                                </CardActions>
-                            </Card>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
                         </div>
                     </div>
                 </div>
@@ -97,7 +122,30 @@ const Dashboard = () => {
                                         Sell
                                     </Typography>
                                     <Typography variant="h5" component="div">
-                                        $709M
+                                        <NumericFormat value={sumSellTypeProperties} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="small">Learn More</Button>
+                                </CardActions>
+                            </Card>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-2">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <Card variant="outlined" className="card">
+                                <CardContent>
+                                    <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                                        Rent
+                                    </Typography>
+                                    <Typography variant="h5" component="div">
+                                        <NumericFormat value={sumRentTypeProperties} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
@@ -164,7 +212,12 @@ const Dashboard = () => {
                     </Card>
                 </div>
             </div>
-
+            <div className="row">
+                <div className="col">
+                    <h4>10 latest properties</h4>
+                    <ReactEcharts option={tenLatestPropertiesChartOption} />
+                </div>
+            </div>
             <ReactEcharts option={option} />
         </div>
     );
