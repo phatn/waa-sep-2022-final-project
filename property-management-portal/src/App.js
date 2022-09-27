@@ -8,23 +8,33 @@ import { PrivateRoute } from 'components/PrivateRoute';
 import { Property } from 'components/Property/Property';
 import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
 import { SecuredPage } from 'components/SecuredPage';
+import { keycloak } from 'Keycloak';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import PropertySearchList from './components/PropertyList/PropertySearchList';
-import { keycloak } from './Keycloak';
+import { storeToken } from './Utils';
 
 function App() {
+    const handleOnEvent = async (event, error) => {
+        console.log(event);
+        if (event === 'onAuthSuccess') {
+            if (keycloak.authenticated) {
+                storeToken(keycloak.token);
+            }
+        }
+    };
+
     return (
         <div className="App">
-            <ReactKeycloakProvider authClient={keycloak}>
+            <ReactKeycloakProvider authClient={keycloak} onEvent={handleOnEvent}>
                 <BrowserRouter>
                     <Header />
                     <Routes>
                         <Route exact path="/" element={<Home />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/property-list" element={<PropertySearchList />} />
-                        <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
+                        <Route path="/property-detail/:id" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
                         <Route path="/secured" element={
                             <PrivateRoute>
@@ -32,7 +42,6 @@ function App() {
                             </PrivateRoute>
                         } />
                         <Route path="*" element={<PageNotFound />} />
-
                     </Routes>
                     <Footer />
                 </BrowserRouter>
