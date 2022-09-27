@@ -121,4 +121,94 @@ public class PropertyServiceImpl implements PropertyService {
                 enumPropertyTypes, enumHomeTypes, minPrice, maxPrice, minRoomNumber, streetPattern, cityPattern, zipCodePattern, listed);
         return propertyMapper.toListDtos(properties);
     }
+
+    @Override
+    public List<PropertyDto> report(String propertyType, List<String> homeTypes, String street, String city, String zipCode) {
+        List<PropertyType> enumPropertyTypes = PreparePropertyType(propertyType);
+        List<HomeType> enumHomeTypes = PrepareHomeType(homeTypes);
+        List<String> location = PrepareLocation(street, city, zipCode);
+
+        String streetPattern = location.get(0);
+        String cityPattern = location.get(1);
+        String zipCodePattern = location.get(2);
+
+        List<Property> properties = propertyRepo.findByPropertyTypeInAndHomeTypeInAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCase(
+                enumPropertyTypes, enumHomeTypes, streetPattern, cityPattern, zipCodePattern);
+
+        return propertyMapper.toListDtos(properties);
+    }
+
+	@Override
+	public List<PropertyDto> findFirst10() {
+        List<Property> properties = propertyRepo.findFirst10ByOrderByCreatedDateDesc();
+
+        return propertyMapper.toListDtos(properties);
+	}
+
+    @Override
+    public long getSumSellTypeProperties() {
+        return propertyRepo.getSumSellTypeProperties();
+    }
+
+    @Override
+    public long getSumRentTypeProperties() {
+        return propertyRepo.getSumRentTypeProperties();
+    }
+
+	private List<PropertyType> PreparePropertyType(String propertyType) {
+        List<PropertyType> enumPropertyTypes = new ArrayList<>();
+
+        for (PropertyType pt : PropertyType.values()) {
+            if (pt.toString().equalsIgnoreCase(propertyType)) {
+                enumPropertyTypes.add(pt);
+            }
+        }
+        if (enumPropertyTypes.isEmpty()) {
+            enumPropertyTypes.addAll(Arrays.stream(PropertyType.values()).toList());
+        }
+
+        return enumPropertyTypes;
+    }
+
+    private List<HomeType> PrepareHomeType(List<String> homeTypes) {
+        List<HomeType> enumHomeTypes = new ArrayList<>();
+
+        for (String homeType : homeTypes) {
+            for (HomeType ht : HomeType.values()) {
+                if (ht.toString().equalsIgnoreCase(homeType)) {
+                    enumHomeTypes.add(ht);
+                }
+            }
+        }
+        if (enumHomeTypes.isEmpty()) {
+            enumHomeTypes.addAll(Arrays.stream(HomeType.values()).toList());
+        }
+
+        return enumHomeTypes;
+    }
+
+    private List<String> PrepareLocation(String street, String city, String zipCode) {
+        String streetPattern = street;
+
+        if (!street.equals("%")) {
+            streetPattern = "%" + street + "%";
+        }
+
+        String cityPattern = city;
+        if (!city.equals("%")) {
+            cityPattern = "%" + city + "%";
+        }
+
+        String zipCodePattern = zipCode;
+        if (!zipCode.equals("%")) {
+            zipCodePattern = "%" + zipCode + "%";
+        }
+
+        List<String> result = new ArrayList<>();
+        result.add(streetPattern);
+        result.add(cityPattern);
+        result.add(zipCodePattern);
+
+        return result;
+    }
 }

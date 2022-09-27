@@ -1,11 +1,11 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import counterReducer from './slices/counterSlice';
 import propertySlice from './slices/propertySlice';
+import reportSlice from './slices/reportSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     property: propertySlice.reducer,
+    report: reportSlice.reducer
   },
   middleware: getDefaultMiddleware({
     serializableCheck: false

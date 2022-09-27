@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -16,12 +17,14 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function PropertyCard(props) {
-    console.log(props);
+    // console.log(props);
 
     const [expanded, setExpanded] = useState(false);
+    const nav = useNavigate();
 
     const cardClicked = () => {
         console.log("Card clicked")
+        nav("/property-detail/" + props.id);
     }
 
     const favIconClicked = (e) => {

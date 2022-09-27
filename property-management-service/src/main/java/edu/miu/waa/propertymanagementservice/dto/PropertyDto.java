@@ -29,4 +29,5 @@ public class PropertyDto {
     private boolean deleted = false;
     private UserDto owner;
     private String deletedBy;
+    private LocalDate createdDate;
 }
