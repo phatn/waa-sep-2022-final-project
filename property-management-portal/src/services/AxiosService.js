@@ -1,4 +1,4 @@
-import { getToken } from '@/Utils';
+import { getToken } from 'Utils';
 import axios from 'axios';
 import Constants from 'Constants';
 
