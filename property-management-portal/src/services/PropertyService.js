@@ -22,3 +22,8 @@ export const createProperty = createAsyncThunk(
       return err.message;
     }
 });
+
+ export const getPropertyByEmail =async (email) => {
+    const response = await AxiosService().get(`http://localhost:8080/users/${email}/favourites`);
+    return response.data;
+};

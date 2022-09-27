@@ -11,6 +11,7 @@ import { PrivateRoute } from 'components/PrivateRoute';
 import { SecuredPage } from 'components/SecuredPage';
 import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
 import { Property } from 'components/Property/Property';
+import FavoriteProperty from "./components/FavoriteProperty/FavoriteProperty";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                         <Route exact path="/" element={<Home />} />
                         <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
+                        <Route path="/favorites" element={<FavoriteProperty/>} />
                         <Route path="/secured" element={
                             <PrivateRoute>
                                 <SecuredPage />

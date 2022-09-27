@@ -210,6 +210,10 @@ const Header = () => {
                             <div className="mainmenu">
                                 <nav>
                                     <ul id="navigation">
+                                        <li>
+                                            <Link to="/favorites">Save Home</Link>
+                                        </li>
+
                                         <li className="active">
                                             <Link to="/">Home</Link>
                                         </li>
