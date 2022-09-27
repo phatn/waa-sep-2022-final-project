@@ -1,26 +1,17 @@
-import React from 'react';
-import { AxiosService } from './AxiosService';
+import axios from 'axios';
 
 
-export const awsS3Upload = async (token, formData) => {
+export const awsS3Upload = async (url, file) => {
   try {
-    const result = await AxiosService(token, true).post('/files', formData);
+    const result = await axios.put(url, {
+      data: file
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return result;
   } catch (err) {
     throw new Error(err.message);
   }
 }
-// const instance = axios.create({
-//     baseURL: 'http://localhost:4040/',
-//     headers: { 'Authorization': 'Bearer ' + AppConstant.accessToken}
-// });
-// export const createProperty = createAsyncThunk(
-//   'properties/create',
-//   async (propertyData) => {
-//     const { token, ...property } = propertyData;
-//     try {
-//       return await AxiosService(token).post('/properties', JSON.stringify(property));
-//     } catch(err) {
-//       return err.message;
-//     }
-// });

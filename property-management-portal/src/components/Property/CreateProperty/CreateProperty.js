@@ -32,6 +32,7 @@ import { createProperty } from 'services/PropertyService';
 import { MultiUploader } from 'components/MultiUploader/MultiUploader';
 import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { awsS3Upload } from 'services/FileService';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -77,6 +78,7 @@ export const CreateProperty = (props) => {
 
   const [selectedPictures, setSelectedPictures] = useState([]);
   const [pictureChips, setPictureChips] = useState([]);
+  const [fileNames, setFileNames] = useState([])
 
   useEffect(() => {
     if (loading) {
@@ -104,7 +106,7 @@ export const CreateProperty = (props) => {
     setIsOpenForm(false);
   };
 
-  //const propertyState = useSelector((state) => state.property);
+  const propertyState = useSelector((state) => state.property);
   const dispatch = useDispatch();
 
   const handleChange = (evt) => {
@@ -133,27 +135,33 @@ export const CreateProperty = (props) => {
   };
 
   const handleCapture = (evt) => {
-    console.log('capture');
-    //const selectedFiles = Array.prototype.slice.call(evt.target.files);
-    const selectedFile = evt.target.files[0];
-    console.log(selectedFile);
+    const timestamp = dayjs().unix();
+    
+    const selectedFile = renameFile(evt.target.files[0], timestamp);
     //{ key: 0, label: 'Angular', main: true },
     const length = selectedPictures.length;
     const newPictureChip = { key: length + 1, label: selectedFile.name, main: length === 0 ? true : false };
     setPictureChips((prevChips) => [...prevChips, newPictureChip]);
     setSelectedPictures((prevSeletectPics) => [...prevSeletectPics, selectedFile]);
-    //evt.target.files[0]
-    //[{key:1, label: 'filename', ...}]
-    //setSelectedPictures((old) => [...old, {key: selectedPictures.length, label: selectedFiles.name}]);
-    // if (typeof picker === 'function') {
-    //   picker(pictures.push(evt.target.files))
-    // }
+    setFileNames((prevFileNames) => [...prevFileNames, selectedFile.name]);
   };
+
+  const renameFile = (originalFile, suffix) => {
+    let name = originalFile.name;
+    const idx = name.lastIndexOf('.');
+    const newName = name.substring(0, idx) + `-${suffix}` + name.substring(idx);
+  
+    return new File([originalFile], newName, {
+      type: originalFile.type,
+      lastModified: originalFile.lastModified
+    });
+  }
 
   const handleDelete = (deletedPicture) => {
     const idx = deletedPicture.key;
     setPictureChips(prev => prev.filter(item => item.key !== deletedPicture.key));
     setSelectedPictures((prevSelectedPics) => [...prevSelectedPics.slice(0, idx - 1), ...prevSelectedPics.slice(idx)]);
+    setFileNames((prevFileNames) => [...prevFileNames.slice(0, idx - 1), ...prevFileNames.sliceidx]);
   };
 
   const selectMainItem = (selectedPicture) => {
@@ -171,8 +179,7 @@ export const CreateProperty = (props) => {
     });
     
     selectedPictures.sort(function (x, y) { return x.name === nameMain ? -1 : y.name === nameMain ? 1 : 0; });
-    
-    console.log('new sort', selectedPictures);
+    fileNames.sort(function (x, y) { return x === nameMain ? -1 : y === nameMain ? 1 : 0; });
   }
 
   const handleReset = () => {
@@ -223,19 +230,30 @@ export const CreateProperty = (props) => {
   const handleSave = () => {
     if (formValid) {
       setLoading(true);
+    } else {
+      //validation false
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (loading) {
       const price = parseFloat(property.price.substring(1).replace(/,/g, ''));
       const saveProperty = {
         ...property,
         price: price,
-        token: '',
+        pictures: fileNames
       };
+
       dispatch(createProperty(saveProperty))
-        .then(async(response) => {
+        .then(async (response) => {
+          console.log('response', response.payload);
           //put images to aws s3
-          const presignUrls = response.presignPictures;
-          await presignUrls.map(url => {
-            //
-          })
+          const presignUrls = response.payload.presignPictures;
+          console.log('presign url', presignUrls);
+          await Promise.all(presignUrls.map((url, idx) => {
+            return awsS3Upload(url, selectedPictures[idx]);
+          }));
           //close dialog
           setLoading(false);
           closeForm();
@@ -243,13 +261,11 @@ export const CreateProperty = (props) => {
           setAlertContent('Property is saved successful!');
         })
         .catch((error) => {
+          console.log('error', error);
           setAlertContent(error);
         });
-    } else {
-      //validation false
-      setLoading(false);
     }
-  };
+  }, [loading]);
 
   return (
     <>

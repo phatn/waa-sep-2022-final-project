@@ -14,10 +14,11 @@ export const getPropertyById = createAsyncThunk('properties/fetchById', async (i
 export const createProperty = createAsyncThunk(
   'properties/create',
   async (propertyData) => {
-    const { token, ...property } = propertyData;
+    //const { token, ...property } = propertyData;
     try {
-      return await axiosInstance.post('/properties', JSON.stringify(property));
+      const response = await axiosInstance.post('/properties', propertyData);
+      return response.data;
     } catch(err) {
-      return err.message;
+      return err.error;
     }
 });

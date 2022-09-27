@@ -12,12 +12,16 @@ const propertySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createProperty.fulfilled, (state, action) => {
-      state.properties.push(action.payload);
-    })
-      .addCase(getPropertyById.fulfilled, (state, action) => {
       state.property = action.payload;
       state.loadedProperty = true;
     })
+      .addCase(createProperty.pending, (state) => {
+        state.loadedProperty = false;
+      })
+      .addCase(getPropertyById.fulfilled, (state, action) => {
+        state.property = action.payload;
+        state.loadedProperty = true;
+      })
       .addCase(getPropertyById.pending, (state) => {
         state.loadedProperty = false;
       })
