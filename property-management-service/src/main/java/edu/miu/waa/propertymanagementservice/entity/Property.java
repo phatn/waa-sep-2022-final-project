@@ -6,12 +6,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Property {
+@EntityListeners(AuditListener.class)
+public class Property implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +32,10 @@ public class Property {
     @Embedded
     private Address location;
 
-
-//    @OneToMany(mappedBy = "property")
-//    private Set<Picture> pictures;
-
     @Convert(converter = SetStringConverter.class)
     private Set<String> pictures;
 
+    @Column(length = 5000)
     private String overview;
 
     private LocalDate availableDate;
@@ -51,6 +50,17 @@ public class Property {
     @ManyToOne
     private User owner;
 
+    // ======== Audit ===============
+    private LocalDateTime createdDate;
+
+    private String createdBy;
+
     private String deletedBy;
+
+    private LocalDateTime deletedDate;
+
+    private LocalDateTime updatedDate;
+
+    private String updatedBy;
 
 }

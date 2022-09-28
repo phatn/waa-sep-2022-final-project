@@ -10,6 +10,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@CrossOrigin
 public class UserController {
 
 

@@ -12,6 +12,7 @@ import { SecuredPage } from 'components/SecuredPage';
 import PropertyDetail from 'components/PropertyDetail/PropertyDetail';
 import { Property } from 'components/Property/Property';
 import FavoriteProperty from "./components/FavoriteProperty/FavoriteProperty";
+import PropertySearchList from './components/PropertyList/PropertySearchList';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Header />
                     <Routes>
                         <Route exact path="/" element={<Home />} />
+                        <Route path="/property-list" element={<PropertySearchList />} />
                         <Route path="/property-detail/" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
                         <Route path="/favorites" element={<FavoriteProperty/>} />

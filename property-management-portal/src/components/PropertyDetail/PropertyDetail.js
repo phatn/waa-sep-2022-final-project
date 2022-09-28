@@ -31,6 +31,8 @@ export default function PropertyDetail(props) {
     };
     return (
         <div>
+
+            {console.log(JSON.stringify(propertyState))}
             { !propertyState.loadedProperty ?
                 <div>Loading</div> :
                 <div>

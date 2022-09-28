@@ -3,7 +3,7 @@ spring:
     name: property-management-service
 
   datasource:
-    password: postgres
+    password: root
     url: jdbc:postgresql://localhost:5432/property_mgmt_db
     username: postgres
 

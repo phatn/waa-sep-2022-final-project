@@ -13,9 +13,8 @@ export const getPropertyById = createAsyncThunk('properties/fetchById', async (i
 
 export const createProperty = createAsyncThunk(
   'properties/create',
-  async (propertyData, thunkApi) => {
+  async (propertyData) => {
     const { token, ...property } = propertyData;
-    console.log('thunkApi', thunkApi);
     try {
       return await AxiosService(token).post('/properties', JSON.stringify(property));
     } catch(err) {
@@ -23,7 +22,10 @@ export const createProperty = createAsyncThunk(
     }
 });
 
- export const getPropertyByEmail =async (email) => {
+
+export const getPropertyByEmail = createAsyncThunk('properties/fetchByEmail', async (email) => {
     const response = await AxiosService().get(`http://localhost:8080/users/${email}/favourites`);
+
+    console.log('in PropertyService: ' + JSON.stringify(response.data))
     return response.data;
-};
+});
