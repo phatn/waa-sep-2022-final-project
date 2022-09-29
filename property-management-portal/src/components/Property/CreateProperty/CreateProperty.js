@@ -230,21 +230,12 @@ export const CreateProperty = (props) => {
   const handleSave = () => {
     if (formValid) {
       setLoading(true);
-    } else {
-      //validation false
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (loading) {
       const price = parseFloat(property.price.substring(1).replace(/,/g, ''));
       const saveProperty = {
         ...property,
         price: price,
         pictures: fileNames
       };
-
       dispatch(createProperty(saveProperty))
         .then(async (response) => {
           console.log('response', response.payload);
@@ -264,8 +255,11 @@ export const CreateProperty = (props) => {
           console.log('error', error);
           setAlertContent(error);
         });
+    } else {
+      //validation false
+      setLoading(false);
     }
-  }, [loading]);
+  };
 
   return (
     <>
