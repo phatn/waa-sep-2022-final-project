@@ -36,6 +36,7 @@ function App() {
                         <Route path="/property-list" element={<PropertySearchList />} />
                         <Route path="/property-detail/:id" element={<PropertyDetail open={true} />} />
                         <Route path="/property" element={<Property />} />
+                        <Route path="/favorites" element={<FavoriteProperty/>} />
                         <Route path="/secured" element={
                             <PrivateRoute>
                                 <SecuredPage />
