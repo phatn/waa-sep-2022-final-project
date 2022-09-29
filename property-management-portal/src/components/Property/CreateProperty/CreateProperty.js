@@ -14,12 +14,12 @@ import {
   DialogContent,
   DialogActions,
   LinearProgress,
+  Card, styled, Chip
 } from '@mui/material';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ResetIcon from '@mui/icons-material/RestartAlt';
 import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
@@ -29,14 +29,18 @@ import { InputCurrencyFormat } from 'components/InputCurrencyFormat/InputCurrenc
 import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCustom';
 import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
-import { AlertDialog } from 'components/AlertDialog/AlertDialog';
 import { MultiUploader } from 'components/MultiUploader/MultiUploader';
+import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { awsS3Upload } from 'services/FileService';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction='down' ref={ref} {...props} />;
 });
-
+const ListItem = styled('li')(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 export const CreateProperty = (props) => {
   const initialProperty = {
     price: '',
@@ -64,11 +68,7 @@ export const CreateProperty = (props) => {
   const [property, setProperty] = useState(initialProperty);
   const [propertyType, setPropertyType] = useState('');
   const [homeType, setHomeType] = useState('');
-  const [alertContent, setAlertContent] = useState({
-    message: '',
-    title: '',
-    onClose: undefined
-  });
+  const [alertContent, setAlertContent] = useState('');
   const [validProperty, setValidProperty] = useState(initValidProperty);
   const [openAlert, setOpenAlert] = useState(false);
   const [isOpenForm, setIsOpenForm] = useState(false);
@@ -76,11 +76,16 @@ export const CreateProperty = (props) => {
   const [loading, setLoading] = useState(false);
   const [formValid, setFormValid] = useState(false);
 
+  const [selectedPictures, setSelectedPictures] = useState([]);
+  const [pictureChips, setPictureChips] = useState([]);
+  const [fileNames, setFileNames] = useState([])
+
   useEffect(() => {
     if (loading) {
       const timer = setInterval(() => {
         setProgress((oldProgress) => {
           if (oldProgress === 100) {
+            setProgress(0);
             closeForm();
           }
           const diff = Math.random() * 10;
@@ -101,7 +106,7 @@ export const CreateProperty = (props) => {
     setIsOpenForm(false);
   };
 
-  const propertyState = useSelector((state) => state.properties);
+  const propertyState = useSelector((state) => state.property);
   const dispatch = useDispatch();
 
   const handleChange = (evt) => {
@@ -129,9 +134,53 @@ export const CreateProperty = (props) => {
     validateField(evt.target.name, evt.target.value);
   };
 
-  const handleCapture = () => {
-    console.log('capture');
+  const handleCapture = (evt) => {
+    const timestamp = dayjs().unix();
+    
+    const selectedFile = renameFile(evt.target.files[0], timestamp);
+    //{ key: 0, label: 'Angular', main: true },
+    const length = selectedPictures.length;
+    const newPictureChip = { key: length + 1, label: selectedFile.name, main: length === 0 ? true : false };
+    setPictureChips((prevChips) => [...prevChips, newPictureChip]);
+    setSelectedPictures((prevSeletectPics) => [...prevSeletectPics, selectedFile]);
+    setFileNames((prevFileNames) => [...prevFileNames, selectedFile.name]);
   };
+
+  const renameFile = (originalFile, suffix) => {
+    let name = originalFile.name;
+    const idx = name.lastIndexOf('.');
+    const newName = name.substring(0, idx) + `-${suffix}` + name.substring(idx);
+  
+    return new File([originalFile], newName, {
+      type: originalFile.type,
+      lastModified: originalFile.lastModified
+    });
+  }
+
+  const handleDelete = (deletedPicture) => {
+    const idx = deletedPicture.key;
+    setPictureChips(prev => prev.filter(item => item.key !== deletedPicture.key));
+    setSelectedPictures((prevSelectedPics) => [...prevSelectedPics.slice(0, idx - 1), ...prevSelectedPics.slice(idx)]);
+    setFileNames((prevFileNames) => [...prevFileNames.slice(0, idx - 1), ...prevFileNames.sliceidx]);
+  };
+
+  const selectMainItem = (selectedPicture) => {
+    const idxMain = selectedPicture.key;
+    const nameMain = selectedPicture.label;
+    setPictureChips(prevChips => {
+      return prevChips.map(item => {
+        if (item.key === idxMain) {
+          item.main = true;
+        } else {
+          item.main = false;
+        }
+        return item;
+      });
+    });
+    
+    selectedPictures.sort(function (x, y) { return x.name === nameMain ? -1 : y.name === nameMain ? 1 : 0; });
+    fileNames.sort(function (x, y) { return x === nameMain ? -1 : y === nameMain ? 1 : 0; });
+  }
 
   const handleReset = () => {
     setProperty(initialProperty);
@@ -158,6 +207,7 @@ export const CreateProperty = (props) => {
       [fieldName]: message
     })
   }
+
   const validateForm = () => {
     let flag = true;
     for (const key in property) {
@@ -172,6 +222,7 @@ export const CreateProperty = (props) => {
     }
     setFormValid(flag);
   }
+
   useEffect(() => {
     validateForm();
   }, [property]);
@@ -183,30 +234,29 @@ export const CreateProperty = (props) => {
       const saveProperty = {
         ...property,
         price: price,
-        token: '',
+        pictures: fileNames
       };
       dispatch(createProperty(saveProperty))
-        .then(() => {
+        .then(async (response) => {
+          console.log('response', response.payload);
+          //put images to aws s3
+          const presignUrls = response.payload.presignPictures;
+          console.log('presign url', presignUrls);
+          await Promise.all(presignUrls.map((url, idx) => {
+            return awsS3Upload(url, selectedPictures[idx]);
+          }));
           //close dialog
           setLoading(false);
           closeForm();
           setOpenAlert(true);
-          setAlertContent({
-            title: 'Property Create Confirmation',
-            message: 'Property is saved successful!',
-            onClose: () => setOpenAlert(false)
-          });
+          setAlertContent('Property is saved successful!');
         })
         .catch((error) => {
-          setAlertContent({
-            open: true,
-            title: 'Property Create Confirmation',
-            message: error,
-            onClose: () => setOpenAlert(false)
-          });
+          console.log('error', error);
+          setAlertContent(error);
         });
     } else {
-      //validation
+      //validation false
       setLoading(false);
     }
   };
@@ -383,7 +433,6 @@ export const CreateProperty = (props) => {
                 <DatePicker
                   id='availableDate'
                   name='availableDate'
-                  //label='Available Date'
                   inputFormat='MM/DD/YYYY'
                   minDate={dayjs('01-01-2022')}
                   value={property.availableDate}
@@ -400,22 +449,44 @@ export const CreateProperty = (props) => {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12}>
-              <MultiUploader
+              {/* <MultiUploader
                 label='Upload Pictures'
                 id='pictures'
-                changed={handleCapture}
-              />
-              {/* <Button variant='contained' component='label' startIcon={<CloudUploadIcon />}>
+                pictures={selectedPictures}
+                picker={setSelectedPictures}
+              /> */}
+              <Button variant='contained' component='label' startIcon={<CloudUploadIcon />}>
                 Upload Pictures
                 <input
                   hidden
-                  accept='image/*'
+                  accept=".jpg, .png, .jpeg, .webp"
                   multiple
                   type='file'
                   id='pictures'
                   onChange={handleCapture}
                 />
-              </Button> */}
+              </Button>
+              {
+                selectedPictures.length > 0 && pictureChips.length > 0 &&
+                <Card spacing={2}  className='picture-capture' id='pictureContent'>
+                  {
+                    pictureChips.map(pic => (
+                      <ListItem
+                        key={pic.key}
+                      >
+                        <Chip
+                          variant="outlined"
+                          label={pic.label}
+                          onDelete={() => handleDelete(pic)}
+                          onClick={() => selectMainItem(pic)}
+                          color={pic.main === true ? 'primary' : undefined}
+                        />
+                      </ListItem>
+                    ))
+                  }
+                </Card>
+              }
+              
             </Grid>
             <Grid item xs={12}></Grid>
           </Grid>
@@ -440,12 +511,14 @@ export const CreateProperty = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <AlertDialog
+      <SnackbarCustom
+        vertical='top'
+        horizontal='right'
         open={openAlert}
-        onClose={() => setOpenAlert(!openAlert)}
-        title={alertContent.title}
-        message={alertContent.message}
-      />
+        autoHideDuration={6000}
+        severity="success"
+        closed={() => setOpenAlert(!openAlert)}
+      >{alertContent}</SnackbarCustom>
     </>
   );
 };

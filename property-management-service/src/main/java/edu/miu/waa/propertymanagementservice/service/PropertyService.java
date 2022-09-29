@@ -16,4 +16,10 @@ public interface PropertyService {
                              int minRoomNumber, String street,
                              String city, String zipCode,
                              Boolean listed);
+
+    List<PropertyDto> report(String propertyType, List<String> homeType, String street, String city, String zipCode);
+
+	List<PropertyDto> findFirst10();
+    long getSumSellTypeProperties();
+    long getSumRentTypeProperties();
 }

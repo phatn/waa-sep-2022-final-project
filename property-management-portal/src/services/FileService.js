@@ -1,8 +1,15 @@
-import React from 'react';
-import { AxiosService } from './AxiosService';
-export const upload = async (token, formData) => {
+import axios from 'axios';
+
+
+export const awsS3Upload = async (url, file) => {
   try {
-    const result = await AxiosService(token, true).post('/files', formData);
+    const result = await axios.put(url, {
+      data: file
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return result;
   } catch (err) {
     throw new Error(err.message);

@@ -1,5 +1,6 @@
 package edu.miu.waa.propertymanagementservice.service.impl;
 
+import edu.miu.waa.propertymanagementservice.constant.AWSConfigProperties;
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,8 @@ import java.util.*;
 public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepo;
     private final PropertyMapper propertyMapper;
+    private final S3FileServiceImpl s3FileService;
+    private final AWSConfigProperties configAWS;
 
     @Override
     public PropertyDto save(PropertyDto property) {
@@ -29,9 +33,28 @@ public class PropertyServiceImpl implements PropertyService {
         System.out.println(property.getHomeType());
         System.out.println(property.getAvailableDate());
         System.out.println(property.getLocation());
-        System.out.println(property.getPictures());
+
+        Set<String> pictureNames = property.getPictures();
+        System.out.println(pictureNames);
+
+
+        Set<String> pictureUrls = s3FileService.getPresignedUrls(pictureNames);
+        System.out.println(pictureUrls);
+
+        String awsBaseUrl = configAWS.getBaseUrl();
+        Set<String> basePictureUrls = pictureNames.stream()
+                .map(name -> {
+                    return awsBaseUrl + "/" + name;
+                }).collect(Collectors.toSet());
+
+        System.out.println(basePictureUrls);
+
+        property.setPictures(basePictureUrls);
+
         Property result = propertyRepo.save(propertyMapper.toEntity(property));
-        return propertyMapper.toDto(result);
+        PropertyDto propertyDto = propertyMapper.toDto(result);
+        propertyDto.setPresignPictures(pictureUrls);
+        return propertyDto;
     }
 
     @Override
@@ -97,5 +120,95 @@ public class PropertyServiceImpl implements PropertyService {
         List<Property> properties = propertyRepo.findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListed(
                 enumPropertyTypes, enumHomeTypes, minPrice, maxPrice, minRoomNumber, streetPattern, cityPattern, zipCodePattern, listed);
         return propertyMapper.toListDtos(properties);
+    }
+
+    @Override
+    public List<PropertyDto> report(String propertyType, List<String> homeTypes, String street, String city, String zipCode) {
+        List<PropertyType> enumPropertyTypes = PreparePropertyType(propertyType);
+        List<HomeType> enumHomeTypes = PrepareHomeType(homeTypes);
+        List<String> location = PrepareLocation(street, city, zipCode);
+
+        String streetPattern = location.get(0);
+        String cityPattern = location.get(1);
+        String zipCodePattern = location.get(2);
+
+        List<Property> properties = propertyRepo.findByPropertyTypeInAndHomeTypeInAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCase(
+                enumPropertyTypes, enumHomeTypes, streetPattern, cityPattern, zipCodePattern);
+
+        return propertyMapper.toListDtos(properties);
+    }
+
+	@Override
+	public List<PropertyDto> findFirst10() {
+        List<Property> properties = propertyRepo.findFirst10ByOrderByCreatedDateDesc();
+
+        return propertyMapper.toListDtos(properties);
+	}
+
+    @Override
+    public long getSumSellTypeProperties() {
+        return propertyRepo.getSumSellTypeProperties();
+    }
+
+    @Override
+    public long getSumRentTypeProperties() {
+        return propertyRepo.getSumRentTypeProperties();
+    }
+
+	private List<PropertyType> PreparePropertyType(String propertyType) {
+        List<PropertyType> enumPropertyTypes = new ArrayList<>();
+
+        for (PropertyType pt : PropertyType.values()) {
+            if (pt.toString().equalsIgnoreCase(propertyType)) {
+                enumPropertyTypes.add(pt);
+            }
+        }
+        if (enumPropertyTypes.isEmpty()) {
+            enumPropertyTypes.addAll(Arrays.stream(PropertyType.values()).toList());
+        }
+
+        return enumPropertyTypes;
+    }
+
+    private List<HomeType> PrepareHomeType(List<String> homeTypes) {
+        List<HomeType> enumHomeTypes = new ArrayList<>();
+
+        for (String homeType : homeTypes) {
+            for (HomeType ht : HomeType.values()) {
+                if (ht.toString().equalsIgnoreCase(homeType)) {
+                    enumHomeTypes.add(ht);
+                }
+            }
+        }
+        if (enumHomeTypes.isEmpty()) {
+            enumHomeTypes.addAll(Arrays.stream(HomeType.values()).toList());
+        }
+
+        return enumHomeTypes;
+    }
+
+    private List<String> PrepareLocation(String street, String city, String zipCode) {
+        String streetPattern = street;
+
+        if (!street.equals("%")) {
+            streetPattern = "%" + street + "%";
+        }
+
+        String cityPattern = city;
+        if (!city.equals("%")) {
+            cityPattern = "%" + city + "%";
+        }
+
+        String zipCodePattern = zipCode;
+        if (!zipCode.equals("%")) {
+            zipCodePattern = "%" + zipCode + "%";
+        }
+
+        List<String> result = new ArrayList<>();
+        result.add(streetPattern);
+        result.add(cityPattern);
+        result.add(zipCodePattern);
+
+        return result;
     }
 }

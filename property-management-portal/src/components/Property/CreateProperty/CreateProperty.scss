@@ -10,3 +10,14 @@ h4 {
 p.capitalize::first-letter, p.Mui-error::first-letter {
   text-transform: capitalize !important;
 }
+
+.picture-capture {
+  padding: 5px 0;
+  margin: 10px 0;
+
+  li {
+    list-style: none;
+    padding: 5px;
+    margin: 5px;
+  }
+}

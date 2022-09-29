@@ -22,10 +22,12 @@ public class PropertyDto {
     private HomeType homeType;
     private Address location;
     private Set<String> pictures;
+    private Set<String> presignPictures;
     private String overview;
     private LocalDate availableDate;
     private boolean listed = true;
     private boolean deleted = false;
     private UserDto owner;
     private String deletedBy;
+    private LocalDate createdDate;
 }
