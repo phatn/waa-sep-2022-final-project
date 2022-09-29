@@ -3,6 +3,10 @@ import {useEffect, useState} from "react";
 import { getPropertyById } from "../../services/PropertyService";
 import {Box, Button, Modal, Typography} from "@mui/material";
 import './PropertyDetail.scss';
+import RequestTour from "./RequestTour";
+import ContactAgent from "./ContactAgent";
+import { useParams } from "react-router";
+
 
 export default function PropertyDetail(props) {
 
@@ -10,12 +14,17 @@ export default function PropertyDetail(props) {
 
     const dispatch = useDispatch();
 
+    const params = useParams();
+
     useEffect(() => {
-        dispatch(getPropertyById(1))
+        dispatch(getPropertyById(params.id))
 
     },[])
 
+
     const [open, setOpen] = useState(props.open);
+
+
     const handleClose = () => setOpen(false);
     const style = {
         position: 'absolute',
@@ -31,6 +40,7 @@ export default function PropertyDetail(props) {
     };
     return (
         <div>
+            {console.log(JSON.stringify(propertyState))}
             { !propertyState.loadedProperty ?
                 <div>Loading</div> :
                 <div>
@@ -45,7 +55,7 @@ export default function PropertyDetail(props) {
                                    <div className='property-picture'>
                                    {
                                        propertyState.property.pictures.map(p =>
-                                        <img src={p} />
+                                        <img key={p} src={p} />
                                        )
                                    }
                                </div>
@@ -60,9 +70,13 @@ export default function PropertyDetail(props) {
                                    <div className='heading'>
                                         <p>
                                             <span className='price'>${propertyState.property.price}</span>
-                                            {propertyState.property.numOfRoom}
+                                            {propertyState.property.numOfRoom} bd
                                         </p>
-                                       <p>{propertyState.property.location.street} </p>
+                                       <p>{propertyState.property.location.street}, {propertyState.property.location.city}, {propertyState.property.location.zipCode}</p>
+                                       <div className='btn-contacts'>
+                                           <RequestTour property={propertyState.property} />
+                                           <ContactAgent />
+                                       </div>
                                    </div>
                                </div>
                            </div>

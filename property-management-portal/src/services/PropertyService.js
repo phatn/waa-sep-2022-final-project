@@ -6,9 +6,15 @@ export const getAllProperties = createAsyncThunk('properties/fetchAll', async ()
 });
 
 export const getPropertyById = createAsyncThunk('properties/fetchById', async (id) => {
-  const response = await axiosInstance.get(`http://localhost:8080/properties/${id}`);
+  const response = await axiosInstance.get(`/properties/${id}`);
   return response.data;
 });
+
+export const contact = createAsyncThunk('properties/contact', async (payload) => {
+    console.log('Inside: ' + JSON.stringify(payload));
+    const response = await axiosInstance.post('/contacts', payload);
+    return response.data;
+})
 
 
 export const createProperty = createAsyncThunk(

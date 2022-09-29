@@ -1,2 +1,5 @@
 ### GET Property By ID
-GET http://localhost:8080/properties/100
+GET http://localhost:8080/properties/1
+
+### GET FAV BY EMAIL
+GET http://localhost:8080/users/phat@gmail.com/favourites

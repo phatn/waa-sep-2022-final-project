@@ -8,6 +8,7 @@
 
 .property-detail {
   width: 40%;
+  padding: 1rem;
 }
 
 
@@ -26,11 +27,37 @@ div.property-picture-box {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #c6c6c6;
-  padding: 1rem;
 }
 
 .price {
   font-weight: 700;
   font-size: 2rem;
   margin-right: 1rem;
+}
+
+.btn-contacts {
+  display: flex;
+  justify-content: space-between;
+
+  .btn-request-tour {
+    width: 68%;
+  }
+
+  .btn-contact-agent {
+    width: 30%;
+  }
+}
+
+button.btn-request-time {
+  padding-bottom: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.date-time {
+  margin-top: 1.5rem;
+}
+
+.contact-input {
+  margin-bottom: 1rem;
 }

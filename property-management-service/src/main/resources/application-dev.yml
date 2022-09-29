@@ -27,6 +27,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-
 server:
   port: 8080
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  email: miu.property.portal@gmail.com
+  #  password: uSCCG435L5R7464
+  password: fsreuiapqrsdpnwo
