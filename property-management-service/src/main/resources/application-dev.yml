@@ -34,3 +34,4 @@ mail:
   host: smtp.gmail.com
   port: 587
   email: miu.property.portal@gmail.com
+  password: ${EMAIL_PASSWORD}

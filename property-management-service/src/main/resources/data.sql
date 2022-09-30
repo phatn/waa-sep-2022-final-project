@@ -1,7 +1,7 @@
 -- USERS
 INSERT INTO users(email)
 VALUES
-    ('phat@gmail.com'),
+    ('tan.nguyen@miu.edu'),
     ('thiep@gmail.com'),
     ('thi.truong@miu.edu'),
     ('phong@gmail.com'),
