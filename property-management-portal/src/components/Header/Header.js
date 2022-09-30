@@ -214,9 +214,6 @@ const Header = () => {
                                             <Link to="/">Home</Link>
                                         </li>
                                         <li>
-                                            <Link to="/property">Property</Link>
-                                        </li>
-                                        <li>
                                             <Link to="/property-detail">Property Detail</Link>
                                         </li>
                                         <li>
@@ -270,7 +267,7 @@ const Header = () => {
                         </div>
                         <div className="col-lg-2">
                             <div className="header-action">
-                                <Link to="components/Header/Header#">submit property</Link>
+                                <Link to="/property">submit property</Link>
                             </div>
                         </div>
                     </div>

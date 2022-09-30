@@ -1,5 +1,6 @@
 package edu.miu.waa.propertymanagementservice;
 
+
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,4 +24,5 @@ public class PropertyManagementServiceApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 }

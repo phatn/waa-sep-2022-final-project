@@ -18,6 +18,12 @@ public class S3FileControler {
     @GetMapping("/{name}")
     public Set<String> getFileListUrls(@PathVariable String name ) {
         Set<String> fileNames = new HashSet<>(Arrays.asList(name));
-        return s3FileService.getFileListUrls(fileNames);
+        return s3FileService.getReadingUrls(fileNames);
+    }
+
+    @GetMapping("/presign/{name}")
+    public Set<String> getPresignUrl(@PathVariable String name) {
+        Set<String> fileNames = new HashSet<>(Arrays.asList(name));
+        return s3FileService.getPresignedUrls(fileNames);
     }
 }

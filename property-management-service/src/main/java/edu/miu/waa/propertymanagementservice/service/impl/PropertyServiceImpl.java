@@ -27,27 +27,14 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto save(PropertyDto property) {
-        System.out.println(property.getPrice());
-        System.out.println(property.getNumOfRoom());
-        System.out.println(property.getPropertyType());
-        System.out.println(property.getHomeType());
-        System.out.println(property.getAvailableDate());
-        System.out.println(property.getLocation());
-
         Set<String> pictureNames = property.getPictures();
-        System.out.println(pictureNames);
-
-
         Set<String> pictureUrls = s3FileService.getPresignedUrls(pictureNames);
-        System.out.println(pictureUrls);
-
         String awsBaseUrl = configAWS.getBaseUrl();
+
         Set<String> basePictureUrls = pictureNames.stream()
                 .map(name -> {
                     return awsBaseUrl + "/" + name;
                 }).collect(Collectors.toSet());
-
-        System.out.println(basePictureUrls);
 
         property.setPictures(basePictureUrls);
 
@@ -66,7 +53,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto findById(int id) {
-        log.info("Fetching property: {}", id);
+        //log.info("Fetching property: {}", id);
         return propertyRepo.findById(id)
                 .map(propertyMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));

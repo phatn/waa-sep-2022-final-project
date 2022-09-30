@@ -1,6 +1,10 @@
-import { Button, Checkbox, FormControl, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
+import {
+    Button, Checkbox, FormControl, Grid,
+    InputLabel, ListItemText, MenuItem,
+    OutlinedInput, Select, TextField
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import axiosInstance from "../../services/AxiosService";
+import axiosInstance from "/services/AxiosService";
 import Constants from "Constants";
 import "./PropertyList.scss";
 import PropertyList from "./PropertyList";
