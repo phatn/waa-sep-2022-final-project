@@ -12,6 +12,7 @@ export const awsS3Upload = async (url, file) => {
     });
     return result;
   } catch (err) {
+    console.log('error', err);
     throw new Error(err.message);
   }
 }

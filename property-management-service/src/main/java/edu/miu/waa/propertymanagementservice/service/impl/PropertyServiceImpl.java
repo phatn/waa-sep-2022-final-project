@@ -66,7 +66,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDto findById(int id) {
-        log.info("Fetching property: {}", id);
+        //log.info("Fetching property: {}", id);
         return propertyRepo.findById(id)
                 .map(propertyMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));

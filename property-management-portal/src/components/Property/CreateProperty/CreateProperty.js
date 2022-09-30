@@ -29,7 +29,6 @@ import { InputCurrencyFormat } from 'components/InputCurrencyFormat/InputCurrenc
 import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCustom';
 import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
-import { MultiUploader } from 'components/MultiUploader/MultiUploader';
 import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { awsS3Upload } from 'services/FileService';
@@ -177,15 +176,21 @@ export const CreateProperty = (props) => {
         return item;
       });
     });
-    
-    selectedPictures.sort(function (x, y) { return x.name === nameMain ? -1 : y.name === nameMain ? 1 : 0; });
-    fileNames.sort(function (x, y) { return x === nameMain ? -1 : y === nameMain ? 1 : 0; });
+    const tmpPictures = [...selectedPicture];
+    tmpPictures.sort(function (x, y) { return x.name === nameMain ? -1 : y.name === nameMain ? 1 : 0; });
+    setSelectedPictures(tmpPictures);
+    const tmpFileName = [...fileNames];
+    tmpFileName.sort(function (x, y) { return x === nameMain ? -1 : y === nameMain ? 1 : 0; });
+    setFileNames(tmpFileName);
   }
 
   const handleReset = () => {
     setProperty(initialProperty);
     setHomeType('');
     setPropertyType('');
+    setSelectedPictures([]);
+    setPictureChips([]);
+    setFileNames([]);
   };
   const validateField = (fieldName, fieldValue) => {
     let message = '';
@@ -238,10 +243,8 @@ export const CreateProperty = (props) => {
       };
       dispatch(createProperty(saveProperty))
         .then(async (response) => {
-          console.log('response', response.payload);
           //put images to aws s3
           const presignUrls = response.payload.presignPictures;
-          console.log('presign url', presignUrls);
           await Promise.all(presignUrls.map((url, idx) => {
             return awsS3Upload(url, selectedPictures[idx]);
           }));
@@ -252,8 +255,7 @@ export const CreateProperty = (props) => {
           setAlertContent('Property is saved successful!');
         })
         .catch((error) => {
-          console.log('error', error);
-          setAlertContent(error);
+          setAlertContent(error.message);
         });
     } else {
       //validation false
