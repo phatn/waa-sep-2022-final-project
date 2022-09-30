@@ -1,6 +1,6 @@
 import { Button, Checkbox, FormControl, Grid, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { AxiosService } from "../../services/AxiosService";
+import axiosInstance from "../../services/AxiosService";
 import Constants from "Constants";
 import "./PropertyList.scss";
 import PropertyList from "./PropertyList";
@@ -283,7 +283,7 @@ export default function PropertySearchList(props) {
     const getProperties = async (url) => {
         console.log("Get properties");
         console.log(Constants);
-        let properties = await AxiosService("").get(url);
+        let properties = await axiosInstance.get(url);
         console.log(properties);
         // set default image
         properties.data.map(prop => {
