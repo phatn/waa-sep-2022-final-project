@@ -1,8 +1,8 @@
 package edu.miu.waa.propertymanagementservice.service;
 
-import edu.miu.waa.propertymanagementservice.domain.ContactDetail;
+import edu.miu.waa.propertymanagementservice.domain.RequestVisitDetail;
 
 public interface EmailService {
 
-    String send(ContactDetail contactDetail);
+    void send(String recipient, String title, String content);
 }

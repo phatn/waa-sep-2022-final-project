@@ -6,15 +6,13 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { deriveEmailFromToken } from "../../Utils";
 import { useDispatch, useSelector } from "react-redux";
-import { contact } from "../../services/PropertyService";
+import { requestVisit } from "../../services/PropertyService";
 
 export default function RequestTour(props) {
     const { property } = props;
     const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch();
-
-    const propertyState = useSelector(state => state.property);
 
     const handleOpen = () => {
         setOpen(true);
@@ -33,7 +31,8 @@ export default function RequestTour(props) {
         email: deriveEmailFromToken(),
         message: `I am interested in ${property.location.street}, ${property.location.city}, ${property.location.zipCode}`,
         dateTime: dateTime.toString(),
-        visitType: visitType
+        visitType: visitType,
+        ownerEmail: property.owner.email
     }
 
     const [formState, setFormState] = useState(initialForm);
@@ -49,15 +48,17 @@ export default function RequestTour(props) {
     };
 
     const onRequestVisitClicked = () => {
-        dispatch(contact({...formState}));
-        setOpen(false);
-
+        if(!!formState.name && !!formState.phone && !!formState.message) {
+            dispatch(requestVisit({...formState}));
+            setFormState(initialForm);
+            setOpen(false);
+        }
     }
 
     return (
 
         <>
-            <Button size="large" className='btn-request-tour' variant="contained" onClick={handleOpen}>Request a tour</Button>
+            <Button size="medium" className='btn-request-tour' variant="contained" onClick={handleOpen}>Request a tour</Button>
             <Modal
                 hideBackdrop
                 open={open}
@@ -66,7 +67,7 @@ export default function RequestTour(props) {
                 aria-describedby="child-modal-description"
             >
                 <Box sx={style}>
-                    <h2 id="child-modal-title">Tour with a Buyer's Agent <Button  onClick={handleClose}>Close</Button></h2>
+                    <h2 id="child-modal-title">Tour with a Buyer's Agent <Button onClick={handleClose}>Close</Button></h2>
                     <p id="child-modal-description">
                         Go on a personalized tour of this home by connecting with a local buyers' agent who advertises on WAA Property
                     </p>
@@ -94,9 +95,9 @@ export default function RequestTour(props) {
                             />
                         </LocalizationProvider>
                     </div>
-                    <div className='contact-input'><TextField required={true} fullWidth={true} id="outlined-basic" label="Name" name='name' variant="standard" onChange={onInputChanged}/></div>
-                    <div className='contact-input'><TextField required={true} fullWidth={true} id="outlined-basic" label="Phone" variant="standard" name='phone' onChange={onInputChanged}/></div>
-                    <div className='contact-input'><TextField disabled={true} fullWidth={true} id="outlined-basic" label="Email" variant="standard" value={formState.email}/></div>
+                    <div className='contact-input'><TextField required fullWidth id="outlined-basic" label="Name" name='name' variant="standard" onChange={onInputChanged}/></div>
+                    <div className='contact-input'><TextField required fullWidth id="outlined-basic" label="Phone" variant="standard" name='phone' onChange={onInputChanged}/></div>
+                    <div className='contact-input'><TextField disabled fullWidth id="outlined-basic" label="Email" variant="standard" value={formState.email}/></div>
                     <div className='contact-input'><TextField
                         fullWidth={true}
                         id="outlined-basic"
@@ -109,7 +110,7 @@ export default function RequestTour(props) {
                         onChange={onInputChanged}
                     /></div>
                     <div>
-                        <Button className='btn-request-time' variant='contained' size='large' onClick={onRequestVisitClicked}>Request Visit</Button>
+                        <Button className='btn-request-time' variant='contained' size='large' onClick={onRequestVisitClicked}>Contact</Button>
                     </div>
                 </Box>
             </Modal>

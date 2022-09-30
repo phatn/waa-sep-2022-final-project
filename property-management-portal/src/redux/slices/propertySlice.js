@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { contact, createProperty, getPropertyById } from "services/PropertyService";
+import { contact, createProperty, getPropertyById, requestVisit } from "services/PropertyService";
 
 const initialState = {
   properties: [],  loadedProperties: false,
@@ -37,6 +37,11 @@ const propertySlice = createSlice({
     builder.addCase(contact.fulfilled, (state, action) => {
       state.contactResponse = action.payload;
     })
+
+    builder.addCase(requestVisit.fulfilled, (state, action) => {
+      state.contactResponse = action.payload;
+    })
+
   }
 });
 

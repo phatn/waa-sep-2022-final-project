@@ -11,11 +11,14 @@ export const getPropertyById = createAsyncThunk('properties/fetchById', async (i
 });
 
 export const contact = createAsyncThunk('properties/contact', async (payload) => {
-    console.log('Inside: ' + JSON.stringify(payload));
-    const response = await axiosInstance.post('/contacts', payload);
+    const response = await axiosInstance.post('/contacts/contact', payload);
     return response.data;
 })
 
+export const requestVisit = createAsyncThunk('properties/visit', async (payload) => {
+    const response = await axiosInstance.post('/contacts/visit', payload);
+    return response.data;
+})
 
 export const createProperty = createAsyncThunk(
   'properties/create',

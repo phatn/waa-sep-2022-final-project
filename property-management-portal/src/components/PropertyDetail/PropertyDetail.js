@@ -40,7 +40,6 @@ export default function PropertyDetail(props) {
     };
     return (
         <div>
-            {console.log(JSON.stringify(propertyState))}
             { !propertyState.loadedProperty ?
                 <div>Loading</div> :
                 <div>
@@ -75,7 +74,7 @@ export default function PropertyDetail(props) {
                                        <p>{propertyState.property.location.street}, {propertyState.property.location.city}, {propertyState.property.location.zipCode}</p>
                                        <div className='btn-contacts'>
                                            <RequestTour property={propertyState.property} />
-                                           <ContactAgent />
+                                           <ContactAgent property={propertyState.property} />
                                        </div>
                                    </div>
                                </div>
