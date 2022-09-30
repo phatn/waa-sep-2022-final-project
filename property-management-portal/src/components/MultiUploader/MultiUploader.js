@@ -18,26 +18,13 @@ const initChip = [
 
 export const MultiUploader = (props) => {
   const { id, label, picker, pictures, ...other  } = props;
-  //const [isUploading, setUploading] = useState(false);
   const [selectedPictures, setSelectedPictures] = useState([]);
 
   const onChange = async (evt) => {
-    //let formData = new FormData();
-    //setUploadedPictures([]);
-    //formData.append('file', evt.target.files[0]);
   }
 
   const handleCapture = (evt) => {
-    console.log('handleCapture multiuploader');
     const selectedFiles = Array.prototype.slice.call(evt.target.files);
-    //evt.target.files[0]
-    //[{key:1, label: 'filename', ...}]
-    console.log(evt.target.files[0]);
-    console.log(selectedFiles);
-    //setSelectedPictures((old) => [...old, {key: selectedPictures.length, label: selectedFiles.name}]);
-    // if (typeof picker === 'function') {
-    //   picker(pictures.push(evt.target.files))
-    // }
   }
   const handleDelete = (deletedItem) => {
     setSelectedPictures(prev => prev.filter(item => item.key !== deletedItem.key));
