@@ -16,9 +16,7 @@ export const getSumRentTypeProperties = createAsyncThunk('reports/getSumRentType
     return response.data;
 });
 
-
-
-export const get10LatestProperties = createAsyncThunk('reports/get10LatestProperties', async () => {
-    const response = await axiosInstance.get('/reports/properties/latest');
+export const getLatestProperties = createAsyncThunk('reports/getLatestProperties', async (number) => {
+    const response = await axiosInstance.get('/reports/properties/latest/' + number);
     return response.data;
 });

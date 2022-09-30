@@ -13,3 +13,16 @@ export function getToken() {
 export function deriveEmailFromToken() {
     return jwt_decode(getToken()).email;
 }
+
+export function isRole(role) {
+    const auth = jwt_decode(getToken());
+
+    return auth?.realm_access?.roles?.includes(role);
+}
+
+export const currencyUSDFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+});

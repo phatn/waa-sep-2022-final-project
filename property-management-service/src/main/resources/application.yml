@@ -37,3 +37,9 @@ aws:
   base-url: "https://waaproject-bucket.s3.us-west-1.amazonaws.com"
   accessKey-id: ${ACCESS_KEY_ID}
   access-key-secret: ${ACCESS_KEY_SECRET}
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  email: miu.property.portal@gmail.com
+  password: ${EMAIL_PASSWORD}
