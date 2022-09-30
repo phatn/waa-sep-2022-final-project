@@ -13,3 +13,7 @@ export function getToken() {
 export function deriveEmailFromToken() {
     return jwt_decode(getToken()).email;
 }
+
+export function getLoggedRoles() {
+    return jwt_decode(getToken()).realm_access.roles[0];
+}

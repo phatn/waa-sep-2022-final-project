@@ -27,11 +27,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { InputCurrencyFormat } from 'components/InputCurrencyFormat/InputCurrencyFormat';
 import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCustom';
-import Constants from 'Constants';
 import { createProperty } from 'services/PropertyService';
 import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { awsS3Upload } from 'services/FileService';
+import { initialProperty, initValidProperty } from './InitialDatas';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Constants from 'Constants';
 import './CreateProperty.scss';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -40,30 +41,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
+
 export const CreateProperty = (props) => {
-  const initialProperty = {
-    price: '',
-    numOfRoom: '',
-    propertyType: '',
-    homeType: '',
-    location: {
-      street: '',
-      city: '',
-      zipCode: '',
-    },
-    overview: '',
-    availableDate: dayjs(),
-    pictures: [],
-  };
-  const initValidProperty = {
-    price: '',
-    numOfRoom: '',
-    propertyType: '',
-    homeType: '',
-    street: '',
-    city: '',
-    zipCode: ''
-  }
   const [property, setProperty] = useState(initialProperty);
   const [propertyType, setPropertyType] = useState('');
   const [homeType, setHomeType] = useState('');
@@ -77,7 +56,10 @@ export const CreateProperty = (props) => {
 
   const [selectedPictures, setSelectedPictures] = useState([]);
   const [pictureChips, setPictureChips] = useState([]);
-  const [fileNames, setFileNames] = useState([])
+  const [fileNames, setFileNames] = useState([]);
+
+  const propertyState = useSelector((state) => state.property);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (loading) {
@@ -104,9 +86,6 @@ export const CreateProperty = (props) => {
   const closeForm = () => {
     setIsOpenForm(false);
   };
-
-  const propertyState = useSelector((state) => state.property);
-  const dispatch = useDispatch();
 
   const handleChange = (evt) => {
     if (['street', 'city', 'zipCode'].includes(evt.target.name)) {
@@ -135,7 +114,6 @@ export const CreateProperty = (props) => {
 
   const handleCapture = (evt) => {
     const timestamp = dayjs().unix();
-    
     const selectedFile = renameFile(evt.target.files[0], timestamp);
     //{ key: 0, label: 'Angular', main: true },
     const length = selectedPictures.length;
@@ -192,6 +170,7 @@ export const CreateProperty = (props) => {
     setPictureChips([]);
     setFileNames([]);
   };
+  
   const validateField = (fieldName, fieldValue) => {
     let message = '';
     if (['street', 'city', 'zipCode'].includes(fieldName)) {
@@ -255,7 +234,12 @@ export const CreateProperty = (props) => {
           setAlertContent('Property is saved successful!');
         })
         .catch((error) => {
-          setAlertContent(error.message);
+          if (error.message) {
+            setAlertContent(error.message);
+          } else {
+            //status
+            setAlertContent('You have not permission for this feature!'); 
+          }
         });
     } else {
       //validation false
@@ -451,12 +435,6 @@ export const CreateProperty = (props) => {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12}>
-              {/* <MultiUploader
-                label='Upload Pictures'
-                id='pictures'
-                pictures={selectedPictures}
-                picker={setSelectedPictures}
-              /> */}
               <Button variant='contained' component='label' startIcon={<CloudUploadIcon />}>
                 Upload Pictures
                 <input
@@ -517,7 +495,7 @@ export const CreateProperty = (props) => {
         vertical='top'
         horizontal='right'
         open={openAlert}
-        autoHideDuration={6000}
+        autoHideDuration={500}
         severity="success"
         closed={() => setOpenAlert(!openAlert)}
       >{alertContent}</SnackbarCustom>

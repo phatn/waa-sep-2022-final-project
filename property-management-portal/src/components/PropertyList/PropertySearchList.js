@@ -1,14 +1,14 @@
+import { useEffect, useState } from "react";
 import {
     Button, Checkbox, FormControl, Grid,
     InputLabel, ListItemText, MenuItem,
     OutlinedInput, Select, TextField
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../services/AxiosService";
 import Constants from "Constants";
-import "./PropertyList.scss";
 import PropertyList from "./PropertyList";
-import { useSearchParams } from "react-router-dom";
+import "./PropertyList.scss";
 
 const DEFAULT_IMG = process.env.PUBLIC_URL + "/slider-1.jpeg";
 const HOME_TYPES = [
