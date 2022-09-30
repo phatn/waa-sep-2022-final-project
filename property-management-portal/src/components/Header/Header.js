@@ -214,9 +214,6 @@ const Header = () => {
                                             <Link to="/">Home</Link>
                                         </li>
                                         <li>
-                                            <Link to="/property-detail">Property Detail</Link>
-                                        </li>
-                                        <li>
                                             <Link to="/secured">Secure Page</Link>
                                         </li>
                                         <li>
