@@ -10,6 +10,13 @@ import { useParams } from "react-router";
 
 export default function PropertyDetail(props) {
 
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+
     const propertyState = useSelector((state) => state.property);
 
     const dispatch = useDispatch();
@@ -68,13 +75,17 @@ export default function PropertyDetail(props) {
                                    </div>
                                    <div className='heading'>
                                         <p>
-                                            <span className='price'>${propertyState.property.price}</span>
+                                            <span className='price'>{formatter.format(propertyState.property.price)}</span>
                                             {propertyState.property.numOfRoom} bd
                                         </p>
                                        <p>{propertyState.property.location.street}, {propertyState.property.location.city}, {propertyState.property.location.zipCode}</p>
                                        <div className='btn-contacts'>
                                            <RequestTour property={propertyState.property} />
                                            <ContactAgent property={propertyState.property} />
+                                       </div>
+                                       <div className='property-info'>
+                                           <h3>Overview</h3>
+                                           <p>{propertyState.property.overview}</p>
                                        </div>
                                    </div>
                                </div>
