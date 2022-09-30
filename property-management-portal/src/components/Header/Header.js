@@ -14,7 +14,7 @@ const Header = () => {
                         <div className="col-md-8">
                             <div className="header-top-left">
                                 <p><i className="fa fa-phone-square"></i> 1 (800) 555 5555</p>
-                                <p><i className="fa fa-envelope"></i> example@me.com</p>
+                                <p><i className="fa fa-envelope"></i> miu.property.portal@gmail.com</p>
                             </div>
                         </div>
                         <div className="col-md-4">
