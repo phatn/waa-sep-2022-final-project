@@ -31,6 +31,13 @@ spring:
 server:
   port: 8080
 
+mail:
+  host: smtp.gmail.com
+  port: 587
+  email: miu.property.portal@gmail.com
+  password: ${EMAIL_PASSWORD}
+
+
 aws:
   s3-bucket: "waaproject-bucket"
   region: "us-west-1"
