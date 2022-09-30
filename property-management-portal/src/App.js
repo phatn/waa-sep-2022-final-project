@@ -14,6 +14,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import PropertySearchList from './components/PropertyList/PropertySearchList';
 import { storeToken } from './Utils';
+import FavoriteProperty from "./components/FavoriteProperty/FavoriteProperty";
 
 function App() {
     const handleOnEvent = async (event, error) => {

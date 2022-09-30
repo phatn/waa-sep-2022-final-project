@@ -12,7 +12,7 @@ export default function FavoriteProperty(props){
 
 
     useEffect(()=>{
-        dispatch(getPropertyByEmail('thiep@gmail.com'));
+        dispatch(getPropertyByEmail('phat@gmail.com'));
     },[]);
 
 
