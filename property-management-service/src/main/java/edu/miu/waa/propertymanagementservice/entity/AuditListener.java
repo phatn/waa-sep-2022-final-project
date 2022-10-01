@@ -2,12 +2,14 @@ package edu.miu.waa.propertymanagementservice.entity;
 
 
 import edu.miu.waa.propertymanagementservice.domain.KeyCloakUserDetailsAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class AuditListener {
 
@@ -15,9 +17,14 @@ public class AuditListener {
     void preCreate(Object entity) {
         if(entity instanceof Auditable auditable) {
             auditable.setCreatedDate(LocalDateTime.now());
-            KeyCloakUserDetailsAdapter keyCloakUserDetailsAdapter = (KeyCloakUserDetailsAdapter)SecurityContextHolder
-                    .getContext().getAuthentication().getPrincipal();
-            auditable.setCreatedBy(keyCloakUserDetailsAdapter.getUsername());
+            String username = Optional.ofNullable(SecurityContextHolder
+                    .getContext().getAuthentication())
+                    .map(Authentication::getPrincipal)
+                    .map(a -> (KeyCloakUserDetailsAdapter)a)
+                    .map(KeyCloakUserDetailsAdapter::getUsername)
+                    .orElse("");
+
+            auditable.setCreatedBy(username);
         }
 
     }
@@ -26,18 +33,26 @@ public class AuditListener {
     void preUpdate(Object entity) {
         if(entity instanceof Auditable auditable) {
             auditable.setUpdatedDate(LocalDateTime.now());
-            KeyCloakUserDetailsAdapter keyCloakUserDetailsAdapter = (KeyCloakUserDetailsAdapter)SecurityContextHolder
-                    .getContext().getAuthentication().getPrincipal();
-            auditable.setUpdatedBy(keyCloakUserDetailsAdapter.getUsername());
+            String username = Optional.ofNullable(SecurityContextHolder
+                            .getContext().getAuthentication())
+                    .map(Authentication::getPrincipal)
+                    .map(a -> (KeyCloakUserDetailsAdapter)a)
+                    .map(KeyCloakUserDetailsAdapter::getUsername)
+                    .orElse("");
+            auditable.setUpdatedBy(username);
         }
     }
 
     @PreRemove
     void preRemove(Object entity) {
         if(entity instanceof Auditable auditable) {
-            KeyCloakUserDetailsAdapter keyCloakUserDetailsAdapter = (KeyCloakUserDetailsAdapter)SecurityContextHolder
-                    .getContext().getAuthentication().getPrincipal();
-            auditable.setDeletedBy(keyCloakUserDetailsAdapter.getUsername());
+            String username = Optional.ofNullable(SecurityContextHolder
+                            .getContext().getAuthentication())
+                    .map(Authentication::getPrincipal)
+                    .map(a -> (KeyCloakUserDetailsAdapter)a)
+                    .map(KeyCloakUserDetailsAdapter::getUsername)
+                    .orElse("");
+            auditable.setDeletedBy(username);
             auditable.setDeletedDate(LocalDateTime.now());
         }
     }
