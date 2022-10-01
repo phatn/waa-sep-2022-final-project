@@ -8,10 +8,11 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { updateListedProperty, deleteProperty } from 'services/PropertyService';
 import { formatter } from "./PropertySearchList";
+import { ConfirmDialog } from "../ConfirmDialog/ConfirmDialog";
 import Constants from "Constants";
 
 const ExpandMore = styled((props) => {
@@ -29,10 +30,11 @@ export default function PropertyCard(props) {
     const { roles, ...other } = props;
     const [expanded, setExpanded] = useState(false);
     const [property, setProperty] = useState(other);
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [agree, setAgree] = useState(false);
 
     const location = useLocation();
 
-    //const propertyState = useSelector((state) => state.property);
     const dispatch = useDispatch();
 
     const cardClicked = () => {
@@ -48,7 +50,7 @@ export default function PropertyCard(props) {
         setExpanded(!expanded);
     }
 
-    const handleListAction = () => {
+    const handleListedAction = () => {
         dispatch(updateListedProperty({ id: property.id, listed: !property.listed }))
             .then((response) => {
                 setProperty({
@@ -59,7 +61,17 @@ export default function PropertyCard(props) {
     }
 
     const handleDeleteAction = () => {
-        dispatch(deleteProperty(property.id))
+        setOpenConfirm(true);
+    }
+
+    const agreeDialog = () => {
+        setAgree(true);
+        setOpenConfirm(false)
+    }
+
+    useEffect(() => {
+        if (agree) {
+            dispatch(deleteProperty(property.id))
             .then(() => {
                 setProperty({
                     ...property,
@@ -69,7 +81,8 @@ export default function PropertyCard(props) {
                     props.deletedFunc(property.id);
                 }
             });
-    }
+        }
+    }, [agree])
 
     const handleEditAction = () => {
         //
@@ -107,7 +120,7 @@ export default function PropertyCard(props) {
                         roles.includes(Constants.OWNER_ROLE) === true &&
                         <Tooltip title={property.listed === true ? "Unlist this property" : "Add list this property"}>
                             <IconButton
-                                onClick={handleListAction}>
+                                onClick={handleListedAction}>
                                 {
                                     property.listed === true &&
                                     <PlaylistAddCheckRoundedIcon />
@@ -130,7 +143,7 @@ export default function PropertyCard(props) {
                     {
                         (roles.includes(Constants.OWNER_ROLE) === true || roles.includes(Constants.ADMIN_ROLE)) &&
                         <Tooltip title="Delete this property">
-                            <IconButton onClick={handleDeleteAction} color="error">
+                            <IconButton onClick={handleDeleteAction} color="warning">
                                 <DeleteOutlineRoundedIcon />
                             </IconButton>
                         </Tooltip>
@@ -149,6 +162,15 @@ export default function PropertyCard(props) {
                     </CardContent>
                 </Collapse>
             </Card>
+            <ConfirmDialog
+                open={openConfirm}
+                title='Confirmation'
+                content='Do you really want to delete this property?'
+                titleBtnAgree="Agree"
+                titleBtnCancel="Cancel"
+                cancelFunc={() => setOpenConfirm(false)}
+                agreeFunc={agreeDialog}
+            />
         </div>
     )
 }
