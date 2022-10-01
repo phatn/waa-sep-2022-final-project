@@ -8,7 +8,7 @@ import Constants from "Constants";
 
 export const Property = (props) => {
   const roles = getLoggedRoles();
-
+  
   return (
     <div className='container'>
       <h1>Property List</h1>

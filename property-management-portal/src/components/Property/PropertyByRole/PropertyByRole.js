@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProperties } from 'services/PropertyService';
 import { CircularLoading } from 'components/Loading/CircularLoading';
 import PropertyList from 'components/PropertyList/PropertyList';
-import PropertyCard from 'components/PropertyList/PropertyCard';
+
+import './Property.scss';
 
 
 export const PropertyByRole = (props) => {
-  const { roles } = props;
-
   const propertyState = useSelector((state) => state.property);
   const dispatch = useDispatch();
 
@@ -18,14 +17,22 @@ export const PropertyByRole = (props) => {
   }, []);
 
   return (
-    <div>
+    <div className='property-list'>
       {
         propertyState.loadedProperties === false &&
         <CircularLoading size={'20vh'} />
       }
       {
         propertyState.loadedProperties === true && 
-        <PropertyList properties={propertyState.properties} />
+        <PropertyList
+          properties={propertyState.properties}
+          roles={props.roles}
+          showTitle={false}
+          showFavBtn={false}
+          showListBtn={false}
+          showDeleteBtn={false}
+          itemPerPage={12}
+        />
       }
     </div>
   );

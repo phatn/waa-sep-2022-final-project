@@ -288,7 +288,6 @@ export default function PropertySearchList(props) {
         console.log("Get properties");
         console.log(Constants);
         let properties = await axiosInstance.get(url);
-        console.log(properties);
         // set default image
         properties.data.map(prop => {
             prop.mainPicture = prop.pictures != null && prop.pictures.length > 0 ?
@@ -414,7 +413,10 @@ export default function PropertySearchList(props) {
                 </Grid>
 
             </Grid>
-            <PropertyList properties={properties}></PropertyList>
+            <PropertyList
+                properties={properties}
+                itemPerPage={20}
+            />
         </div>
     )
 };
