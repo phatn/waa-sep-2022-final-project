@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../services/AxiosService";
 import Constants from "Constants";
 import PropertyList from "./PropertyList";
-import { currencyUSDFormatter } from 'Utils';
+import { currencyUSDFormatter, getLoggedRoles } from 'Utils';
 import "./PropertyList.scss";
 
 const DEFAULT_IMG = process.env.PUBLIC_URL + "/slider-1.jpeg";
@@ -39,6 +39,7 @@ export default function PropertySearchList(props) {
     const [maxPricesVal, setMaxPricesVal] = useState([]);
     const [noBed, setNoBed] = useState(0);
     const [homeType, setHomeType] = useState([]);
+    const [roles, setRoles] = useState();
     const [properties, setProperties] = useState([]);
 
     useEffect(() => {
@@ -292,6 +293,10 @@ export default function PropertySearchList(props) {
             prop.formattedPrice = currencyUSDFormatter.format(prop.price)
             return prop;
         });
+        try {
+            let roles = getLoggedRoles();
+            setRoles(roles);
+        } catch (e) { }
         setProperties(properties.data);
     }
 
@@ -412,6 +417,7 @@ export default function PropertySearchList(props) {
             </Grid>
             <PropertyList
                 properties={properties}
+                roles={roles}
                 itemPerPage={20}
             />
         </div>
