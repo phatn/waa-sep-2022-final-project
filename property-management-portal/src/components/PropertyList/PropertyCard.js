@@ -117,7 +117,7 @@ export default function PropertyCard(props) {
                 </Link>
                 <CardActions disableSpacing>
                     {
-                        (roles.includes(Constants.OWNER_ROLE) !== true && roles.includes(Constants.ADMIN_ROLE) !== true) && 
+                        (roles && (roles.includes(Constants.OWNER_ROLE) !== true && roles.includes(Constants.ADMIN_ROLE) !== true)) && 
                         <Tooltip title="Add to favorites">
                             <IconButton onClick={favIconClicked}>
                                 <FavoriteIcon />
@@ -125,7 +125,7 @@ export default function PropertyCard(props) {
                         </Tooltip>
                     }
                     {
-                        roles.includes(Constants.OWNER_ROLE) === true &&
+                        (roles && roles.includes(Constants.OWNER_ROLE) === true) &&
                         <Tooltip title={property.listed === true ? "Unlist this property" : "Add list this property"}>
                             <IconButton
                                 onClick={handleListedAction}>
@@ -141,7 +141,7 @@ export default function PropertyCard(props) {
                         </Tooltip>
                     }
                     {
-                        roles.includes(Constants.OWNER_ROLE) === true &&
+                        (roles && roles.includes(Constants.OWNER_ROLE) === true) &&
                         <Tooltip title="Edit this propery">
                             <IconButton onClick={handleEditAction}>
                                 <EditOutlinedIcon />
@@ -149,7 +149,7 @@ export default function PropertyCard(props) {
                         </Tooltip>
                     }
                     {
-                        (roles.includes(Constants.OWNER_ROLE) === true || roles.includes(Constants.ADMIN_ROLE)) &&
+                        (roles && (roles.includes(Constants.OWNER_ROLE) === true || roles.includes(Constants.ADMIN_ROLE))) &&
                         <Tooltip title="Delete this property">
                             <IconButton onClick={handleDeleteAction} color="warning">
                                 <DeleteOutlineRoundedIcon />
