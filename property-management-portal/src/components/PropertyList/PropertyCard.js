@@ -4,6 +4,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';//add to list
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'; //added
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from "react";
 import { useLocation } from "react-router";
@@ -96,7 +97,7 @@ export default function PropertyCard(props) {
                     {
                         props.showEditBtn === true &&
                         <IconButton arial-label="Edit this propery" onClick={handleEditAction}>
-                            //
+                            <EditOutlinedIcon />
                         </IconButton>
                     }
                     
