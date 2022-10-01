@@ -8,7 +8,7 @@ import { deleteProperty } from 'services/PropertyService';
 import { useDispatch } from "react-redux";
 
 export default function PropertyList(props) {
-    const { properties, itemPerPage, ...others } = props;
+    const { properties, itemPerPage, roles, ...others } = props;
     let [page, setPage] = useState(1);
     const count = Math.ceil(properties.length / itemPerPage );
     const DATA_PAGINATION = DataPagination(properties, itemPerPage);
@@ -43,7 +43,7 @@ export default function PropertyList(props) {
             <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 {DATA_PAGINATION.currentData().map(prop =>
                     <Grid key={prop.id} xs={12} md={6} lg={4} xl={3}>
-                        <PropertyCard {...prop} {...others} deletedFunc={() => handleDelete(prop.id)} />
+                        <PropertyCard {...prop} roles={roles} {...others} deletedFunc={() => handleDelete(prop.id)} />
                     </Grid>
                 )}
             </Grid>
