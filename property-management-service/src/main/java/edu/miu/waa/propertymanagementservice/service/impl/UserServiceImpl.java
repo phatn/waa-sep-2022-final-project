@@ -25,4 +25,14 @@ public class UserServiceImpl implements UserService {
         Set<Property> properties= user.getFavoriteProperties();
         return propertyMapper.toDtos(properties);
     }
+
+    @Override
+    public void addFavoriteProperty(String userEmail, PropertyDto propertyDto) {
+        User user = userRepository.findByEmail(userEmail);
+        Property property = propertyMapper.toEntity(propertyDto);
+        Set<Property> properties = user.getFavoriteProperties();
+        properties.add(property);
+        user.setFavoriteProperties(properties);
+        userRepository.save(user);
+    }
 }

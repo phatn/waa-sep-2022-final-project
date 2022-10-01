@@ -12,16 +12,16 @@ import java.util.Set;
 @RequestMapping("/users")
 @CrossOrigin
 public class UserController {
-
-
     private final UserService userService;
-
-
-
 
     @GetMapping("/{email}/favourites")
     public Set<PropertyDto> favouritePropertyByEmail(@PathVariable("email") String customerEmail){
         System.out.println("this id favorite");
         return userService.favouritePropertyByEmail(customerEmail);
+    }
+
+    @PostMapping("/{email}/favorites")
+    public void addFavoriteProperty(@PathVariable("email") String email, @RequestBody PropertyDto propertyDto) {
+        userService.addFavoriteProperty(email, propertyDto);
     }
 }

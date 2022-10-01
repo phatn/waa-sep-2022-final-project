@@ -9,6 +9,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { deriveEmailFromToken } from "../../Utils";
+import axiosInstance from "../../services/AxiosService";
+import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -24,14 +27,21 @@ const ExpandMore = styled((props) => {
 export default function PropertyCard(props) {
     const [expanded, setExpanded] = useState(false);
     const location = useLocation();
+    const [alertContent, setAlertContent] = useState('');
+    const [openAlert, setOpenAlert] = useState(false);
 
     const cardClicked = () => {
         console.log("Card clicked")
     }
 
-    const favIconClicked = (e) => {
+    const favIconClicked = async (e) => {
         console.log("Fav icon clicked: ");
         console.log(e);
+        const email = deriveEmailFromToken();
+        const url = "/users/" + email + "/favorites"
+        await axiosInstance.post(url, props);
+        setAlertContent("Added to favorite list.");
+        setOpenAlert(true);
     }
 
     const expandClicked = () => {
@@ -70,7 +80,7 @@ export default function PropertyCard(props) {
                 </Link>
                 <CardActions disableSpacing>
                     {
-                        props.showFavBtn !== false && 
+                        props.showFavBtn !== false &&
                         <IconButton aria-label="Add to favorites" onClick={favIconClicked}>
                             <FavoriteIcon />
                         </IconButton>
@@ -100,7 +110,7 @@ export default function PropertyCard(props) {
                             <EditOutlinedIcon />
                         </IconButton>
                     }
-                    
+
                     <ExpandMore expand={expanded} onClick={expandClicked}
                         aria-expanded={expanded} aria-label="Show More">
                         <ExpandMoreIcon />
@@ -114,6 +124,14 @@ export default function PropertyCard(props) {
                     </CardContent>
                 </Collapse>
             </Card>
+            <SnackbarCustom
+                vertical='top'
+                horizontal='right'
+                open={openAlert}
+                autoHideDuration={1000}
+                severity="success"
+                closed={() => setOpenAlert(!openAlert)}
+            >{alertContent}</SnackbarCustom>
         </div>
     )
 }

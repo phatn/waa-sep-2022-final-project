@@ -7,4 +7,6 @@ import java.util.Set;
 public interface UserService {
 
     Set<PropertyDto> favouritePropertyByEmail(String userEmail);
+
+    void addFavoriteProperty(String userEmail, PropertyDto propertyDto);
 }
