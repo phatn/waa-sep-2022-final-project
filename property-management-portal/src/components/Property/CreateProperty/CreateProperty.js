@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { InputCurrencyFormat } from 'components/InputCurrencyFormat/InputCurrencyFormat';
 import { DialogTitleCustom } from 'components/DialogTitleCustom/DialogTitleCustom';
-import { createProperty } from 'services/PropertyService';
+import { createProperty, getAllProperties } from 'services/PropertyService';
 import { SnackbarCustom } from 'components/SnackbarCustom/SnackbarCustom';
 import { awsS3Upload } from 'services/FileService';
 import { initialProperty, initValidProperty } from './InitialDatas';
@@ -115,7 +115,6 @@ export const CreateProperty = (props) => {
   const handleCapture = (evt) => {
     const timestamp = dayjs().unix();
     const selectedFile = renameFile(evt.target.files[0], timestamp);
-    //{ key: 0, label: 'Angular', main: true },
     const length = selectedPictures.length;
     const newPictureChip = { key: length + 1, label: selectedFile.name, main: length === 0 ? true : false };
     setPictureChips((prevChips) => [...prevChips, newPictureChip]);
@@ -138,7 +137,7 @@ export const CreateProperty = (props) => {
     const idx = deletedPicture.key;
     setPictureChips(prev => prev.filter(item => item.key !== deletedPicture.key));
     setSelectedPictures((prevSelectedPics) => [...prevSelectedPics.slice(0, idx - 1), ...prevSelectedPics.slice(idx)]);
-    setFileNames((prevFileNames) => [...prevFileNames.slice(0, idx - 1), ...prevFileNames.sliceidx]);
+    setFileNames((prevFileNames) => [...prevFileNames.slice(0, idx - 1), ...prevFileNames.slice(idx)]);
   };
 
   const selectMainItem = (selectedPicture) => {
@@ -227,6 +226,7 @@ export const CreateProperty = (props) => {
           await Promise.all(presignUrls.map((url, idx) => {
             return awsS3Upload(url, selectedPictures[idx]);
           }));
+          dispatch(getAllProperties());
           //close dialog
           setLoading(false);
           closeForm();

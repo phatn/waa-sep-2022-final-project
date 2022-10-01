@@ -4,6 +4,7 @@ import edu.miu.waa.propertymanagementservice.constant.AWSConfigProperties;
 import edu.miu.waa.propertymanagementservice.domain.KeyCloakUserDetailsAdapter;
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
 import edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto;
+import edu.miu.waa.propertymanagementservice.dto.UserDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
@@ -15,6 +16,7 @@ import edu.miu.waa.propertymanagementservice.repository.UserRepository;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyMapper propertyMapper;
     private final S3FileServiceImpl s3FileService;
     private final AWSConfigProperties configAWS;
+    private final ModelMapper mapper;
 
     @Override
     @PreAuthorize("hasRole('ROLE_OWNER')")
@@ -43,7 +46,11 @@ public class PropertyServiceImpl implements PropertyService {
                 .map(name -> awsBaseUrl + "/" + name).collect(Collectors.toSet());
 
         property.setPictures(basePictureUrls);
+        KeyCloakUserDetailsAdapter owner = (KeyCloakUserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        String email = owner.getUsername();
+        User ownerObj = userRepo.findByEmail(email);
+        property.setOwner(mapper.map(ownerObj, UserDto.class));
         Property result = propertyRepo.save(propertyMapper.toEntity(property));
         PropertyDto propertyDto = propertyMapper.toDto(result);
         propertyDto.setPresignPictures(pictureUrls);
@@ -58,7 +65,6 @@ public class PropertyServiceImpl implements PropertyService {
         KeyCloakUserDetailsAdapter owner = (KeyCloakUserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String role = owner.getRole();
-        System.out.println("current login ROLE: " + role);
         String email = owner.getUsername();
         if(role == "OWNER") {
             //find user

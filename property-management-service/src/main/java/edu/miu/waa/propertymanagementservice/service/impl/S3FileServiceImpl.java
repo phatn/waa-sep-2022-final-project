@@ -34,7 +34,7 @@ public class S3FileServiceImpl implements S3FileService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         // Generated URL will be valid for 1 minute
-        calendar.add(Calendar.MINUTE, 5);
+        calendar.add(Calendar.MINUTE, 1);
         String bucketName = configAWS.getS3Bucket();
         return amazonS3.generatePresignedUrl(bucketName, fileName, calendar.getTime(), httpMethod)
                 .toString();
