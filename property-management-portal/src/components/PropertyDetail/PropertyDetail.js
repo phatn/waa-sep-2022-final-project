@@ -1,7 +1,7 @@
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { getPropertyById } from "../../services/PropertyService";
-import {Box, Button, Modal, Typography} from "@mui/material";
+import { Box, Button, Grid, Modal } from "@mui/material";
 import './PropertyDetail.scss';
 import RequestTour from "./RequestTour";
 import ContactAgent from "./ContactAgent";
@@ -28,7 +28,7 @@ export default function PropertyDetail(props) {
     useEffect(() => {
         dispatch(getPropertyById(params.id))
 
-    },[])
+    }, [])
 
 
     const [open, setOpen] = useState(props.open);
@@ -53,7 +53,7 @@ export default function PropertyDetail(props) {
     };
     return (
         <div>
-            { !propertyState.loadedProperty ?
+            {!propertyState.loadedProperty ?
                 <div>Loading</div> :
                 <div>
                     <Modal
@@ -63,40 +63,46 @@ export default function PropertyDetail(props) {
                         aria-describedby="modal-modal-description"
                     >
                         <Box sx={style} className='property-picture-box'>
-                           <div className='property-detail-container'>
-                                   <div className='property-picture'>
-                                   {
-                                       propertyState.property.pictures.map(p =>
-                                        <img key={p} src={p} />
-                                       )
-                                   }
-                               </div>
-                               <div className='property-detail'>
-                                   <div className='top-heading'>
-                                       <div className='title'>WAA Property</div>
-                                       <div className='actions'>
-                                           <Button>Save</Button>
-                                           <Button>Share</Button>
-                                       </div>
-                                   </div>
-                                   <div className='heading'>
+                            <div className='property-detail-container'>
+                                <div className='property-picture'>
+                                    {
+                                        propertyState.property.pictures.map(p =>
+                                            <img key={p} src={p} />
+                                        )
+                                    }
+                                </div>
+                                <div className='property-detail'>
+                                    <div className='top-heading'>
+                                        <div className='title'>WAA Property</div>
+                                        <div className='actions'>
+                                            <Button>Save</Button>
+                                            <Button>Share</Button>
+                                        </div>
+                                    </div>
+                                    <div className='heading'>
                                         <p>
                                             <span className='price'>{formatter.format(propertyState.property.price)}</span>
                                             {propertyState.property.numOfRoom} bd
                                         </p>
-                                       <p>{propertyState.property.location.street}, {propertyState.property.location.city}, {propertyState.property.location.zipCode}</p>
-                                       <div className='btn-contacts'>
-                                           <RequestTour property={propertyState.property} />
-                                           <ContactAgent property={propertyState.property} />
-                                           <SubmitApplication property={propertyState.property} />
-                                       </div>
-                                       <div className='property-info'>
-                                           <h3>Overview</h3>
-                                           <p>{propertyState.property.overview}</p>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
+                                        <p>{propertyState.property.location.street}, {propertyState.property.location.city}, {propertyState.property.location.zipCode}</p>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={4} md={4} sx={{ minWidth: 100 }}>
+                                                <RequestTour property={propertyState.property} />
+                                            </Grid>
+                                            <Grid item xs={4} md={4} sx={{ minWidth: 100 }}>
+                                                <ContactAgent property={propertyState.property} />
+                                            </Grid>
+                                            <Grid item xs={4} md={4} sx={{ minWidth: 100 }}>
+                                                <SubmitApplication property={propertyState.property} />
+                                            </Grid>
+                                        </Grid>
+                                        <div className='property-info'>
+                                            <h3>Overview</h3>
+                                            <p>{propertyState.property.overview}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </Box>
                     </Modal>
 

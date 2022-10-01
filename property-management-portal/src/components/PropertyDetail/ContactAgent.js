@@ -47,7 +47,7 @@ export default function ContactAgent(props) {
     return (
 
         <>
-            <Button size="medium" className='btn-contact-agent' variant="outlined" onClick={handleOpen}>Contact Agent</Button>
+            <Button size="medium" className='btn-contact-agent' variant="contained" onClick={handleOpen}>Contact Agent</Button>
             <Modal
                 hideBackdrop
                 open={open}

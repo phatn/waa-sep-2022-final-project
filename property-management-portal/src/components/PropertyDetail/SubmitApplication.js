@@ -57,7 +57,7 @@ export default function SubmitApplication(props) {
 
     return (
         <div>
-            <Button size="medium" variant="contained" onClick={openClicked}>Submit Application</Button>
+            <Button size="medium" variant="contained" onClick={openClicked}>Send Application</Button>
             <Modal hideBackdrop
                 open={open}
                 onClose={closeClicked}
