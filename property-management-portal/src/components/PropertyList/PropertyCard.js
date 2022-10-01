@@ -4,6 +4,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';//add to list
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'; //added
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from "react";
 import { useLocation } from "react-router";
@@ -37,6 +38,18 @@ export default function PropertyCard(props) {
         setExpanded(!expanded);
     }
 
+    const handleListAction = () => {
+        //
+    }
+
+    const handleDeleteAction = () => {
+        //
+    }
+
+    const handleEditAction = () => {
+        //
+    }
+
     return (
         <div>
             <Card sx={{ minWidth: 300 }}>
@@ -44,7 +57,7 @@ export default function PropertyCard(props) {
                     <CardActionArea onClick={cardClicked}>
                         <CardMedia component="img"
                             height="200"
-                            image={props.mainPicture} />
+                            image={props.mainPicture || props.pictures[0]} />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {props.formattedPrice} {props.numOfRoom} bds
@@ -56,9 +69,38 @@ export default function PropertyCard(props) {
                     </CardActionArea>
                 </Link>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="Add to favorites" onClick={favIconClicked}>
-                        <FavoriteIcon />
-                    </IconButton>
+                    {
+                        props.showFavBtn !== false && 
+                        <IconButton aria-label="Add to favorites" onClick={favIconClicked}>
+                            <FavoriteIcon />
+                        </IconButton>
+                    }
+                    {
+                        props.showListBtn === true &&
+                        <IconButton aria-label="List this property" onClick={handleListAction}>
+                            {
+                                props.listed === true &&
+                                <PlaylistAddCheckIcon />
+                            }
+                            {
+                                props.listed === false &&
+                                <PlaylistAddIcon />
+                            }
+                        </IconButton>
+                    }
+                    {
+                        props.showDeleteBtn === true &&
+                        <IconButton arial-label="Delete this propery" onClick={handleDeleteAction}>
+                            <HighlightOffIcon />
+                        </IconButton>
+                    }
+                    {
+                        props.showEditBtn === true &&
+                        <IconButton arial-label="Edit this propery" onClick={handleEditAction}>
+                            <EditOutlinedIcon />
+                        </IconButton>
+                    }
+                    
                     <ExpandMore expand={expanded} onClick={expandClicked}
                         aria-expanded={expanded} aria-label="Show More">
                         <ExpandMoreIcon />

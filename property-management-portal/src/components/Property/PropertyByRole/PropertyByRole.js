@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProperties } from 'services/PropertyService';
 import { CircularLoading } from 'components/Loading/CircularLoading';
 import PropertyList from 'components/PropertyList/PropertyList';
+import Constants from 'Constants';
 
 import './Property.scss';
 
@@ -28,9 +29,20 @@ export const PropertyByRole = (props) => {
           properties={propertyState.properties}
           roles={props.roles}
           showTitle={false}
-          showFavBtn={false}
-          showListBtn={false}
-          showDeleteBtn={false}
+          showFavBtn={
+            props.roles.includes[Constants.ADMIN_ROLE]
+              || props.roles.includes[Constants.OWNER_ROLE] ? false : true
+          }
+          showListBtn={
+            props.roles.includes[Constants.OWNER_ROLE] ? true : false
+          }
+          showDeleteBtn={
+            props.roles.includes[Constants.ADMIN_ROLE]
+              || props.roles.includes[Constants.OWNER_ROLE] ? true : false
+          }
+          showEditBtn={
+            props.roles.includes[Constants.OWNER_ROLE] ? true : false
+          }
           itemPerPage={12}
         />
       }
