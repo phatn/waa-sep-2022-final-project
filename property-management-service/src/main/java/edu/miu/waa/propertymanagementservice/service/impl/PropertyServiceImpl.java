@@ -80,7 +80,7 @@ public class PropertyServiceImpl implements PropertyService {
     public List<PropertyDto> search(String propertyType, List<String> homeTypes,
                                     int minPrice, int maxPrice, int minRoomNumber,
                                     String street, String city, String zipCode,
-                                    Boolean listed) {
+                                    Boolean listed, Boolean deleted) {
         // Property type
         List<PropertyType> enumPropertyTypes = new ArrayList<>();
         for (PropertyType pt : PropertyType.values()) {
@@ -121,8 +121,8 @@ public class PropertyServiceImpl implements PropertyService {
             zipCodePattern = "%" + zipCode + "%";
         }
 
-        List<Property> properties = propertyRepo.findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListed(
-                enumPropertyTypes, enumHomeTypes, minPrice, maxPrice, minRoomNumber, streetPattern, cityPattern, zipCodePattern, listed);
+        List<Property> properties = propertyRepo.findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListedAndDeleted(
+                enumPropertyTypes, enumHomeTypes, minPrice, maxPrice, minRoomNumber, streetPattern, cityPattern, zipCodePattern, listed, deleted);
         return propertyMapper.toListDtos(properties);
     }
 

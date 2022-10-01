@@ -39,8 +39,9 @@ public class PropertyController {
                                     @RequestParam(defaultValue = "%") String street,
                                     @RequestParam(defaultValue = "%") String city,
                                     @RequestParam(defaultValue = "%") String zipCode,
-                                    @RequestParam(defaultValue = "true") boolean listed) {
-        return propertyService.search(propertyType, homeType, minPrice, maxPrice, minRoomNumber, street, city, zipCode, listed);
+                                    @RequestParam(defaultValue = "true") boolean listed,
+                                    @RequestParam(defaultValue = "false") boolean deleted) {
+        return propertyService.search(propertyType, homeType, minPrice, maxPrice, minRoomNumber, street, city, zipCode, listed, deleted);
     }
 
     @PutMapping("/{id}/views")

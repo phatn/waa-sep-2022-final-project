@@ -15,8 +15,8 @@ import java.util.Set;
 
 @Repository
 public interface PropertyRepository extends CrudRepository<Property, Integer> {
-    List<Property> findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListed(
-            Collection<PropertyType> propertyTypes, Collection<HomeType> homeTypes, double minPrice, double maxPrice, int minRoomNumber, String street, String city, String zipCode, Boolean listed);
+    List<Property> findByPropertyTypeInAndHomeTypeInAndPriceBetweenAndNumOfRoomGreaterThanEqualAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCaseAndListedAndDeleted(
+            Collection<PropertyType> propertyTypes, Collection<HomeType> homeTypes, double minPrice, double maxPrice, int minRoomNumber, String street, String city, String zipCode, Boolean listed, Boolean deleted);
 
     List<Property> findByPropertyTypeInAndHomeTypeInAndLocationStreetLikeIgnoreCaseAndLocationCityLikeIgnoreCaseAndLocationZipCodeLikeIgnoreCase(
             Collection<PropertyType> propertyTypes, Collection<HomeType> homeTypes, String street, String city, String zipCode);
