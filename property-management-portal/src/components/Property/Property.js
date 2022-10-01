@@ -17,7 +17,10 @@ export const Property = (props) => {
         <CreateProperty />
       }
       {
-        (roles.includes(Constants.ADMIN_ROLE) || roles.includes(Constants.OWNER_ROLE)) &&
+        (roles.includes(Constants.ADMIN_ROLE)
+          || roles.includes(Constants.OWNER_ROLE)
+          || roles.includes(Constants.CUSTOMER_ROLE)
+        ) &&
           <PropertyByRole roles={roles} />
       }
     </div>

@@ -93,7 +93,7 @@ export default function PropertyCard(props) {
     }, [agree])
 
     const handleEditAction = () => {
-        //
+        console.log("this is edit action");
     }
 
     return (
