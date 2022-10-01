@@ -1,10 +1,11 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Button, Card, CardContent, Typography } from '@mui/material';
 import ReactEcharts from 'echarts-for-react';
 import React, { useEffect, useState } from 'react';
 import { NumericFormat } from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
-    getLatestProperties,
+    getTenLatestProperties,
     getSumRentTypeProperties,
     getSumSellTypeProperties,
     getTotalApplications
@@ -17,56 +18,20 @@ const DashboardAdmin = () => {
     const totalApplications = useSelector((state) => state.report.totalApplications);
     const sumSellTypeProperties = useSelector((state) => state.report.sumSellTypeProperties);
     const sumRentTypeProperties = useSelector((state) => state.report.sumRentTypeProperties);
-    const latestProperties = useSelector((state) => state.report.latestProperties);
+    const tenLatestProperties = useSelector((state) => state.report.tenLatestProperties);
 
-    const [latestPropertiesChartOption, setLatestPropertiesChartOption] = useState({});
+    const [tenLatestPropertiesChartOption, setTenLatestPropertiesChartOption] = useState({});
 
     useEffect(() => {
         dispatch(getTotalApplications());
         dispatch(getSumSellTypeProperties());
         dispatch(getSumRentTypeProperties());
-        dispatch(getLatestProperties(12));
+        dispatch(getTenLatestProperties());
     }, [dispatch]);
 
-    const option = {
-        title: {
-            text: 'Referer of a Website',
-            subtext: 'Fake Data',
-            left: 'center'
-        },
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 'left'
-        },
-        series: [
-            {
-                name: 'Access From',
-                type: 'pie',
-                radius: '50%',
-                data: [
-                    {value: 1048, name: 'Search Engine'},
-                    {value: 735, name: 'Direct'},
-                    {value: 580, name: 'Email'},
-                    {value: 484, name: 'Union Ads'},
-                    {value: 300, name: 'Video Ads'}
-                ],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
-
     useEffect(() => {
-        if (latestProperties) {
-            const data = latestProperties.reduce((p, c) => {
+        if (tenLatestProperties) {
+            const data = tenLatestProperties.reduce((p, c) => {
                 const city = c.location.city;
 
                 if (!p.hasOwnProperty(city)) {
@@ -78,7 +43,7 @@ const DashboardAdmin = () => {
                 return p;
             }, {});
 
-            setLatestPropertiesChartOption({
+            setTenLatestPropertiesChartOption({
                 xAxis: {
                     type: 'category',
                     data: Object.keys(data)
@@ -94,11 +59,11 @@ const DashboardAdmin = () => {
                 ]
             });
         }
-    }, [latestProperties]);
+    }, [tenLatestProperties]);
 
     return (
         <div className="container dashboard-admin">
-            <h2>Dashboard</h2>
+            <h2>Dashboard Admin</h2>
             <div className="row">
                 <div className="col-md-2">
                     <div className="row">
@@ -112,9 +77,6 @@ const DashboardAdmin = () => {
                                         {totalApplications}
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
-                                    <Button size="small">Learn More</Button>
-                                </CardActions>
                             </Card>
                         </div>
                     </div>
@@ -132,9 +94,6 @@ const DashboardAdmin = () => {
                                                        thousandSeparator={true} prefix={'$'} />
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
-                                    <Button size="small">Learn More</Button>
-                                </CardActions>
                             </Card>
                         </div>
                     </div>
@@ -156,9 +115,6 @@ const DashboardAdmin = () => {
                                                        thousandSeparator={true} prefix={'$'} />
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
-                                    <Button size="small">Learn More</Button>
-                                </CardActions>
                             </Card>
                         </div>
                     </div>
@@ -187,9 +143,6 @@ const DashboardAdmin = () => {
                                 </div>
                             </div>
                         </CardContent>
-                        <CardActions>
-                            <Button size="small">Learn More</Button>
-                        </CardActions>
                     </Card>
                 </div>
                 <div className="col-md-3">
@@ -216,9 +169,6 @@ const DashboardAdmin = () => {
                                 </div>
                             </div>
                         </CardContent>
-                        <CardActions>
-                            <Button size="small">Learn More</Button>
-                        </CardActions>
                     </Card>
                 </div>
             </div>
@@ -227,8 +177,8 @@ const DashboardAdmin = () => {
                     <h4>10 latest properties</h4>
                     <div className="container">
                         <div className="row">
-                            {latestProperties.map(p => (
-                                <div className="col-sm-4">
+                            {tenLatestProperties.map(p => (
+                                <div className="col-sm-4" key={p.id}>
                                     <div className="single-property property-tab-view">
                                         <div className="property-image">
                                             <div className="property-inner-image">
@@ -244,22 +194,15 @@ const DashboardAdmin = () => {
                                         </div>
                                         <div className="property-info">
                                             <div className="property-info-head">
-                                                <a href="#">
-                                                    <h3>Beautiful Single Home</h3>
-                                                </a>
-                                                <p><i className="fa fa-map-marker"></i> 33 William St. Northbrook, IL
-                                                </p>
+                                                <Link to={"/property-detail/" + p.id}>
+                                                    <i className="fa fa-map-marker"></i> <h3>{p.location.street}</h3>
+                                                </Link>
                                             </div>
                                             <div className="property-info-list">
                                                 <ul className="info-list-stats">
-                                                    <li><i className="fa fa-bed"></i><span
-                                                        className="info-list-figure">5<sup>+</sup></span> Beds
-                                                    </li>
-                                                    <li><i className="fa fa-bath"></i><span
-                                                        className="info-list-figure">3</span> Baths
-                                                    </li>
-                                                    <li><i className="fa fa-random"></i><span
-                                                        className="info-list-figure">1,250</span> sq.ft
+                                                    <li>
+                                                        <i className="fa fa-bed"></i>
+                                                        <span className="info-list-figure">{p.numOfRoom}</span> Rooms
                                                     </li>
                                                 </ul>
                                                 <Button href="#">View Property</Button>
@@ -270,10 +213,9 @@ const DashboardAdmin = () => {
                             ))}
                         </div>
                     </div>
-                    <ReactEcharts option={latestPropertiesChartOption} />
+                    <ReactEcharts option={tenLatestPropertiesChartOption} />
                 </div>
             </div>
-            <ReactEcharts option={option} />
         </div>
     );
 };

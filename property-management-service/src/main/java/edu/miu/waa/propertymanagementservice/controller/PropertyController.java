@@ -42,4 +42,10 @@ public class PropertyController {
                                     @RequestParam(defaultValue = "true") boolean listed) {
         return propertyService.search(propertyType, homeType, minPrice, maxPrice, minRoomNumber, street, city, zipCode, listed);
     }
+
+    @PutMapping("/{id}/views")
+    public boolean increaseView(@PathVariable int id) {
+        propertyService.increaseView(id);
+        return true;
+    }
 }

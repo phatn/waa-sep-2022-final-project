@@ -30,4 +30,7 @@ public class PropertyDto {
     private UserDto owner;
     private String deletedBy;
     private LocalDate createdDate;
+    private int views;
 }
+
+

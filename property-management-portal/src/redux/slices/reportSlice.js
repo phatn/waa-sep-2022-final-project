@@ -1,11 +1,12 @@
-import { get10LatestProperties, getSumRentTypeProperties, getSumSellTypeProperties, getTotalApplications } from 'services/ReportService';
+import { getTenLatestProperties, getSumRentTypeProperties, getSumSellTypeProperties, getTotalApplications, getViewsPerLocation } from 'services/ReportService';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   totalApplications: 0,
   sumSellTypeProperties: 0,
   sumRentTypeProperties: 0,
-  latestProperties: []
+  tenLatestProperties: [],
+  viewsPerLocation: {}
 }
 
 const reportSlice = createSlice({
@@ -19,8 +20,10 @@ const reportSlice = createSlice({
       state.sumSellTypeProperties = action.payload;
     }).addCase(getSumRentTypeProperties.fulfilled, (state, action) => {
       state.sumRentTypeProperties = action.payload;
-    }).addCase(get10LatestProperties.fulfilled, (state, action) => {
-      state.latestProperties = [...action.payload];
+    }).addCase(getTenLatestProperties.fulfilled, (state, action) => {
+      state.tenLatestProperties = [...action.payload];
+    }).addCase(getViewsPerLocation.fulfilled, (state, action) => {
+      state.viewsPerLocation = action.payload;
     })
   }
 });

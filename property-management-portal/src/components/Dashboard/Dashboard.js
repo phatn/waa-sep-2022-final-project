@@ -8,7 +8,7 @@ const Dashboard = () => {
     const role = useRole();
 
     return (
-        <div>
+        <div className="dashboard">
             {role.isAdmin && <DashboardAdmin />}
             {role.isOwner && <DashboardOwner />}
         </div>

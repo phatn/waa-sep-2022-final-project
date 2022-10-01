@@ -1,5 +1,6 @@
 package edu.miu.waa.propertymanagementservice.repository;
 
+import edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
@@ -25,4 +26,7 @@ public interface PropertyRepository extends CrudRepository<Property, Integer> {
 
 	@Query("SELECT SUM(price) FROM Property WHERE propertyType = 'RENT'")
 	long getSumRentTypeProperties();
+
+	@Query("SELECT new edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto(location.city, SUM(views)) FROM Property GROUP BY location.city")
+	List<PropertyViewsByLocationDto> getSumViewsByLocation();
 }

@@ -2,6 +2,7 @@ package edu.miu.waa.propertymanagementservice.service.impl;
 
 import edu.miu.waa.propertymanagementservice.constant.AWSConfigProperties;
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
+import edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
@@ -142,7 +143,21 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyRepo.getSumRentTypeProperties();
     }
 
-	private List<PropertyType> PreparePropertyType(String propertyType) {
+    @Override
+    public void increaseView(int id) {
+        Property property = propertyRepo.findById(id)
+                           .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));
+
+        property.setViews(property.getViews() + 1);
+        propertyRepo.save(property);
+    }
+
+    @Override
+    public List<PropertyViewsByLocationDto> getViewsPerLocation() {
+        return propertyRepo.getSumViewsByLocation();
+    }
+
+    private List<PropertyType> PreparePropertyType(String propertyType) {
         List<PropertyType> enumPropertyTypes = new ArrayList<>();
 
         for (PropertyType pt : PropertyType.values()) {

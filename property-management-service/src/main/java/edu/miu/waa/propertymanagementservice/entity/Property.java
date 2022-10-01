@@ -64,4 +64,5 @@ public class Property implements Auditable {
 
     private String updatedBy;
 
+    private int views;
 }

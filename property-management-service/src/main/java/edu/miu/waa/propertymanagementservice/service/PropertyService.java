@@ -1,6 +1,7 @@
 package edu.miu.waa.propertymanagementservice.service;
 
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
+import edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface PropertyService {
 	List<PropertyDto> findFirst10();
     long getSumSellTypeProperties();
     long getSumRentTypeProperties();
+
+    void increaseView(int id);
+
+    List<PropertyViewsByLocationDto> getViewsPerLocation();
 }

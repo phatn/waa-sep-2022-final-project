@@ -1,6 +1,7 @@
 package edu.miu.waa.propertymanagementservice.controller;
 
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
+import edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto;
 import edu.miu.waa.propertymanagementservice.service.ApplicationService;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class ReportController {
 	}
 
 	@GetMapping("/properties/latest")
-	@Cacheable(value = "tenLatestProperties")
+	@Cacheable(value = "latestProperties")
 	public List<PropertyDto> get10LatestProperties() {
 		return propertyService.findFirst10();
 	}
@@ -60,5 +61,10 @@ public class ReportController {
 									@RequestParam(defaultValue = "%") String zipCode,
 									@RequestParam(defaultValue = "0") int year) {
 		return propertyService.report(propertyType, homeType, street, city, zipCode);
+	}
+
+	@GetMapping("/properties/views")
+	public List<PropertyViewsByLocationDto> getViewsPerLocation() {
+		return propertyService.getViewsPerLocation();
 	}
 }
