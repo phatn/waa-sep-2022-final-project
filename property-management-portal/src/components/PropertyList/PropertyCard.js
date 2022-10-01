@@ -37,6 +37,18 @@ export default function PropertyCard(props) {
         setExpanded(!expanded);
     }
 
+    const handleListAction = () => {
+        //
+    }
+
+    const handleDeleteAction = () => {
+        //
+    }
+
+    const handleEditAction = () => {
+        //
+    }
+
     return (
         <div>
             <Card sx={{ minWidth: 300 }}>
@@ -56,9 +68,38 @@ export default function PropertyCard(props) {
                     </CardActionArea>
                 </Link>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="Add to favorites" onClick={favIconClicked}>
-                        <FavoriteIcon />
-                    </IconButton>
+                    {
+                        props.showFavBtn !== false && 
+                        <IconButton aria-label="Add to favorites" onClick={favIconClicked}>
+                            <FavoriteIcon />
+                        </IconButton>
+                    }
+                    {
+                        props.showListBtn === true &&
+                        <IconButton aria-label="List this property" onClick={handleListAction}>
+                            {
+                                props.listed === true &&
+                                <PlaylistAddCheckIcon />
+                            }
+                            {
+                                props.listed === false &&
+                                <PlaylistAddIcon />
+                            }
+                        </IconButton>
+                    }
+                    {
+                        props.showDeleteBtn === true &&
+                        <IconButton arial-label="Delete this propery" onClick={handleDeleteAction}>
+                            <HighlightOffIcon />
+                        </IconButton>
+                    }
+                    {
+                        props.showEditBtn === true &&
+                        <IconButton arial-label="Edit this propery" onClick={handleEditAction}>
+                            //
+                        </IconButton>
+                    }
+                    
                     <ExpandMore expand={expanded} onClick={expandClicked}
                         aria-expanded={expanded} aria-label="Show More">
                         <ExpandMoreIcon />
