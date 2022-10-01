@@ -3,13 +3,15 @@ import {
   contact, createProperty,
   getPropertyByEmail,
   getAllProperties,
-  getPropertyById, requestVisit
+  getPropertyById, requestVisit,
+  submitApplication
 } from "services/PropertyService";
 
 const initialState = {
   properties: [],  loadedProperties: false,
   property: null,  loadedProperty: false,
-  contactResponse: null
+  contactResponse: null,
+  applicationResponse: null
 }
 
 const propertySlice = createSlice({
@@ -63,6 +65,11 @@ const propertySlice = createSlice({
       state.favProperties = action.payload;
       state.loadedFavProperties = true;
     });
+
+    builder.addCase(submitApplication.fulfilled, (state, action) => {
+      state.applicationResponse = action.payload;
+    })
+
   }
 });
 

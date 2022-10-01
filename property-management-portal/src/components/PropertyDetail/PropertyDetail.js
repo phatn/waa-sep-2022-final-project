@@ -6,6 +6,7 @@ import './PropertyDetail.scss';
 import RequestTour from "./RequestTour";
 import ContactAgent from "./ContactAgent";
 import { useNavigate, useParams } from "react-router";
+import SubmitApplication from "./SubmitApplication";
 
 
 export default function PropertyDetail(props) {
@@ -87,6 +88,7 @@ export default function PropertyDetail(props) {
                                        <div className='btn-contacts'>
                                            <RequestTour property={propertyState.property} />
                                            <ContactAgent property={propertyState.property} />
+                                           <SubmitApplication property={propertyState.property} />
                                        </div>
                                        <div className='property-info'>
                                            <h3>Overview</h3>

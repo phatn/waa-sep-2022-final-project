@@ -24,6 +24,11 @@ export const requestVisit = createAsyncThunk('properties/visit', async (payload)
     return response.data;
 })
 
+export const submitApplication = createAsyncThunk('properties/application', async (payload) => {
+  const response = await axiosInstance.post('/contacts/application', payload);
+  return response.data;
+})
+
 export const createProperty = createAsyncThunk(
   'properties/create',
   async (propertyData) => {
