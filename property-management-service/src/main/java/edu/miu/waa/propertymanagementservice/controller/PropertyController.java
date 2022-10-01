@@ -42,4 +42,14 @@ public class PropertyController {
                                     @RequestParam(defaultValue = "true") boolean listed) {
         return propertyService.search(propertyType, homeType, minPrice, maxPrice, minRoomNumber, street, city, zipCode, listed);
     }
+
+    @PatchMapping("/{id}/listed/{value}")
+    public PropertyDto updateListedProperty(@PathVariable int id, @PathVariable Boolean value) {
+        return propertyService.updateListedProperty(id, value);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProperty(@PathVariable int id) {
+        propertyService.deleteProperty(id);
+    }
 }

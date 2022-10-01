@@ -1,14 +1,18 @@
-import { Card, CardActionArea, CardActions, CardContent, CardMedia, Collapse, IconButton, Typography } from "@mui/material";
+import { Card, CardActionArea, CardActions, CardContent, CardMedia, Collapse, IconButton, Typography, Tooltip } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';//add to list
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'; //added
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import PlaylistAddCheckRoundedIcon from '@mui/icons-material/PlaylistAddCheckRounded'; //unlist
+import PlaylistAddRoundedIcon from '@mui/icons-material/PlaylistAddRounded'; //add list
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { updateListedProperty, deleteProperty } from 'services/PropertyService';
+import { formatter } from "./PropertySearchList";
+import Constants from "Constants";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -22,8 +26,14 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function PropertyCard(props) {
+    const { roles, ...other } = props;
     const [expanded, setExpanded] = useState(false);
+    const [property, setProperty] = useState(other);
+
     const location = useLocation();
+
+    //const propertyState = useSelector((state) => state.property);
+    const dispatch = useDispatch();
 
     const cardClicked = () => {
         console.log("Card clicked")
@@ -39,11 +49,26 @@ export default function PropertyCard(props) {
     }
 
     const handleListAction = () => {
-        //
+        dispatch(updateListedProperty({ id: property.id, listed: !property.listed }))
+            .then((response) => {
+                setProperty({
+                    ...property,
+                    listed: !property.listed
+                });
+            });
     }
 
     const handleDeleteAction = () => {
-        //
+        dispatch(deleteProperty(property.id))
+            .then(() => {
+                setProperty({
+                    ...property,
+                    deleted: true
+                });
+                if (typeof props.deletedFunc === 'function') {
+                    props.deletedFunc(property.id);
+                }
+            });
     }
 
     const handleEditAction = () => {
@@ -51,54 +76,64 @@ export default function PropertyCard(props) {
     }
 
     return (
+        property.deleted === false && 
         <div>
             <Card sx={{ minWidth: 300 }}>
-                <Link key={props.id} to={`/property-detail/${props.id}`} state={{ background: location }}>
+                <Link key={property.id} to={`/property-detail/${property.id}`} state={{ background: location }}>
                     <CardActionArea onClick={cardClicked}>
                         <CardMedia component="img"
                             height="200"
-                            image={props.mainPicture || props.pictures[0]} />
+                            image={property.mainPicture || property.pictures[0]} />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                {props.formattedPrice} {props.numOfRoom} bds
+                                {property.formattedPrice ? property.formattedPrice : formatter.format(property.price)} - {property.numOfRoom} bds
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                {props.location.street}, {props.location.city} {props.location.zipCode}
+                                {property.location.street}, {property.location.city} {property.location.zipCode}
                             </Typography>
                         </CardContent>
                     </CardActionArea>
                 </Link>
                 <CardActions disableSpacing>
                     {
-                        props.showFavBtn !== false && 
-                        <IconButton aria-label="Add to favorites" onClick={favIconClicked}>
-                            <FavoriteIcon />
-                        </IconButton>
+                        (roles.includes(Constants.OWNER_ROLE) !== true && roles.includes(Constants.ADMIN_ROLE) !== true) && 
+                        <Tooltip title="Add to favorites">
+                            <IconButton onClick={favIconClicked}>
+                                <FavoriteIcon />
+                            </IconButton>
+                        </Tooltip>
                     }
                     {
-                        props.showListBtn === true &&
-                        <IconButton aria-label="List this property" onClick={handleListAction}>
-                            {
-                                props.listed === true &&
-                                <PlaylistAddCheckIcon />
-                            }
-                            {
-                                props.listed === false &&
-                                <PlaylistAddIcon />
-                            }
-                        </IconButton>
+                        roles.includes(Constants.OWNER_ROLE) === true &&
+                        <Tooltip title={property.listed === true ? "Unlist this property" : "Add list this property"}>
+                            <IconButton
+                                onClick={handleListAction}>
+                                {
+                                    property.listed === true &&
+                                    <PlaylistAddCheckRoundedIcon />
+                                }
+                                {
+                                    property.listed === false &&
+                                    <PlaylistAddRoundedIcon />
+                                }
+                            </IconButton>
+                        </Tooltip>
                     }
                     {
-                        props.showDeleteBtn === true &&
-                        <IconButton arial-label="Delete this propery" onClick={handleDeleteAction}>
-                            <HighlightOffIcon />
-                        </IconButton>
+                        roles.includes(Constants.OWNER_ROLE) === true &&
+                        <Tooltip title="Edit this propery">
+                            <IconButton onClick={handleEditAction}>
+                                <EditOutlinedIcon />
+                            </IconButton>
+                        </Tooltip>
                     }
                     {
-                        props.showEditBtn === true &&
-                        <IconButton arial-label="Edit this propery" onClick={handleEditAction}>
-                            <EditOutlinedIcon />
-                        </IconButton>
+                        (roles.includes(Constants.OWNER_ROLE) === true || roles.includes(Constants.ADMIN_ROLE)) &&
+                        <Tooltip title="Delete this property">
+                            <IconButton onClick={handleDeleteAction} color="error">
+                                <DeleteOutlineRoundedIcon />
+                            </IconButton>
+                        </Tooltip>
                     }
                     
                     <ExpandMore expand={expanded} onClick={expandClicked}
@@ -109,7 +144,7 @@ export default function PropertyCard(props) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <Typography paragraph>
-                            {props.overview}
+                            {property.overview}
                         </Typography>
                     </CardContent>
                 </Collapse>

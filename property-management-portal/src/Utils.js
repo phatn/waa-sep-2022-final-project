@@ -21,6 +21,5 @@ export function deriveEmailFromToken() {
 export function getLoggedRoles() {
     const access = jwt_decode(getToken()).realm_access.roles;
     const roles = access.find(el => Constants.ROLE_NAME.includes(el));
-    console.log('roles', roles);
     return roles;
 }

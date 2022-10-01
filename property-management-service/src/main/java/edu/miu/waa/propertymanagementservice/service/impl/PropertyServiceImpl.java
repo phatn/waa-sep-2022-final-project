@@ -1,17 +1,21 @@
 package edu.miu.waa.propertymanagementservice.service.impl;
 
 import edu.miu.waa.propertymanagementservice.constant.AWSConfigProperties;
+import edu.miu.waa.propertymanagementservice.domain.KeyCloakUserDetailsAdapter;
 import edu.miu.waa.propertymanagementservice.dto.PropertyDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
+import edu.miu.waa.propertymanagementservice.entity.User;
 import edu.miu.waa.propertymanagementservice.exception.NotFoundException;
 import edu.miu.waa.propertymanagementservice.mapper.PropertyMapper;
 import edu.miu.waa.propertymanagementservice.repository.PropertyRepository;
+import edu.miu.waa.propertymanagementservice.repository.UserRepository;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepo;
+    private final UserRepository userRepo;
     private final PropertyMapper propertyMapper;
     private final S3FileServiceImpl s3FileService;
     private final AWSConfigProperties configAWS;
@@ -48,13 +53,23 @@ public class PropertyServiceImpl implements PropertyService {
     @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     public Set<PropertyDto> findAll() {
         Set<Property> properties = new HashSet<>();
-        propertyRepo.findAll().forEach(properties::add);
+
+        KeyCloakUserDetailsAdapter owner = (KeyCloakUserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String role = owner.getRole();
+        String email = owner.getUsername();
+        if(role == "OWNER") {
+            //find user
+            User ownerObj = userRepo.findByEmail(email);
+            properties.addAll(propertyRepo.findByDeletedFalseAndOwner(ownerObj));
+        } else {
+            properties.addAll(propertyRepo.findByDeletedFalse());
+        }
         return propertyMapper.toDtos(properties);
     }
 
     @Override
     public PropertyDto findById(int id) {
-        //log.info("Fetching property: {}", id);
         return propertyRepo.findById(id)
                 .map(propertyMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Cannot find property: " + id));
@@ -198,5 +213,61 @@ public class PropertyServiceImpl implements PropertyService {
         result.add(zipCodePattern);
 
         return result;
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_OWNER')")
+    public PropertyDto updateListedProperty(int id, Boolean value) {
+        Property property = propertyRepo.findById(id).get();
+        if(property != null) {
+            property.setListed(value);
+            propertyRepo.save(property);
+            return propertyMapper.toDto(property);
+        } else throw new IllegalArgumentException("Request parameter is invalid!");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
+    public void deleteProperty(int id) {
+        Property property = propertyRepo.findById(id).get();
+        if(property != null) {
+            property.setDeleted(true);
+            propertyRepo.save(property);
+        } else throw new IllegalArgumentException("Request parameter is invalid!");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_OWNER')")
+    public PropertyDto updateProperty(int id, PropertyDto property) {
+        Property prop = propertyRepo.findById(id).get();
+        if(prop != null) {
+            String awsBaseUrl = configAWS.getBaseUrl();
+
+            property.setId(id);
+            Set<String> oldPictures = prop.getPictures();
+
+            Set<String> pictures = property.getPictures();
+            Set<String> pictureUrls = new HashSet<>();
+            if(pictures.size() > 0) {
+                Set<String> newPictures = new HashSet<>();
+                Set<String> basePictureUrls = pictures.stream().map(name -> {
+                    if(!name.contains(awsBaseUrl)) {
+                        newPictures.add(name);
+                        return awsBaseUrl + "/" +name;
+                    } else {
+                        return name;
+                    }
+                }).collect(Collectors.toSet());
+                property.setPictures(basePictureUrls);
+
+                pictureUrls.addAll(s3FileService.getPresignedUrls(newPictures));
+            }
+            Property result = propertyRepo.save(propertyMapper.toEntity(property));
+            PropertyDto propertyDto = propertyMapper.toDto(result);
+            if(pictureUrls.size() > 0) {
+                propertyDto.setPresignPictures(pictureUrls);
+            }
+            return propertyDto;
+        } else throw new IllegalArgumentException("Request parameter is invalid!");
     }
 }

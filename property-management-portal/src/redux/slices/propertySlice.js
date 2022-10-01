@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  contact, createProperty,
+  contact,
+  createProperty,
   getPropertyByEmail,
   getAllProperties,
-  getPropertyById, requestVisit
+  getPropertyById,
+  requestVisit,
+  updateProperty,
+  updateListedProperty,
+  deleteProperty
 } from "services/PropertyService";
 
 const initialState = {
@@ -63,6 +68,27 @@ const propertySlice = createSlice({
       state.favProperties = action.payload;
       state.loadedFavProperties = true;
     });
+
+    builder.addCase(updateProperty.pending, (state) => {
+      state.loadedProperty = false;
+    });
+    builder.addCase(updateProperty.fulfilled, (state, action) => {
+      state.loadedProperty = true;
+      state.property = action.payload;
+    });
+
+    builder.addCase(updateListedProperty.pending, (state) => {
+      state.loadedProperty = false;
+    });
+    builder.addCase(updateListedProperty.fulfilled, (state, action) => {
+      state.loadedProperty = true;
+      state.property = action.payload;
+    });
+
+    builder.addCase(deleteProperty.fulfilled, (state, action) => {
+      state.loadedProperty = true;
+      state.property = action.payload;
+    })
   }
 });
 

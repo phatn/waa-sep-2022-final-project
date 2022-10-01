@@ -20,12 +20,14 @@ const HOME_TYPES = [
 ];
 const RENT = "rent";
 const SELL = "sell";
-const formatter = new Intl.NumberFormat('en-US', {
+
+export const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
 });
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MAX_PRICE = 100_000_000;

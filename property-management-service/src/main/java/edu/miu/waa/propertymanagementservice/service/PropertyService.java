@@ -22,4 +22,8 @@ public interface PropertyService {
 	List<PropertyDto> findFirst10();
     long getSumSellTypeProperties();
     long getSumRentTypeProperties();
+
+    PropertyDto updateListedProperty(int id, Boolean value);
+    void deleteProperty(int id);
+    PropertyDto updateProperty(int id, PropertyDto property);
 }
