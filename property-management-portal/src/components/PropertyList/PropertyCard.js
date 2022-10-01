@@ -1,6 +1,9 @@
 import { Card, CardActionArea, CardActions, CardContent, CardMedia, Collapse, IconButton, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';//add to list
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'; //added
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from "react";
 import { useNavigate } from "react-router";
