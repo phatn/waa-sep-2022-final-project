@@ -45,6 +45,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     public Set<PropertyDto> findAll() {
         Set<Property> properties = new HashSet<>();
         propertyRepo.findAll().forEach(properties::add);
