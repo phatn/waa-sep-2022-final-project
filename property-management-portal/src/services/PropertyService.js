@@ -31,3 +31,9 @@ export const createProperty = createAsyncThunk(
       return err.error;
     }
 });
+
+export const getPropertyByEmail = createAsyncThunk('properties/fetchByEmail', async (email) => {
+    const response = await axiosInstance.get(`/users/${email}/favourites`);
+    console.log('in PropertyService: ' + JSON.stringify(response.data))
+    return response.data;
+});

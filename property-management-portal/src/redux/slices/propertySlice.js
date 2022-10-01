@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { contact, createProperty, getPropertyById, requestVisit } from "services/PropertyService";
+import {contact, createProperty, getPropertyByEmail, getPropertyById, requestVisit} from "services/PropertyService";
 
 const initialState = {
   properties: [],  loadedProperties: false,
@@ -41,6 +41,17 @@ const propertySlice = createSlice({
     builder.addCase(requestVisit.fulfilled, (state, action) => {
       state.contactResponse = action.payload;
     })
+
+    builder.addCase(getPropertyByEmail.pending, (state) => {
+          state.loadedFavProperties = false;
+        })
+    builder.addCase(getPropertyByEmail.fulfilled, (state, action) => {
+          state.favProperties = action.payload;
+          state.loadedFavProperties = true;
+        })
+
+
+
 
   }
 });

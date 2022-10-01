@@ -9,6 +9,7 @@ import React from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import PropertySearchList from './components/PropertyList/PropertySearchList';
+import FavoriteProperty from "./components/FavoriteProperty/FavoriteProperty";
 
 function AppRouter() {
     let location = useLocation();
@@ -22,6 +23,7 @@ function AppRouter() {
                 <Route path="/property-list" element={<PropertySearchList />} />
                 <Route path="/property-detail/:id" element={<PropertyDetail open={true} />} />
                 <Route path="/property" element={<Property />} />
+                <Route path="/favorites" element={<FavoriteProperty/>} />
                 <Route path="/secured" element={
                     <PrivateRoute>
                         <SecuredPage />
