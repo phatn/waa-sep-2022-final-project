@@ -5,17 +5,15 @@ import { useEffect, useState } from "react";
 import DataPagination from "../DataPagination/DataPagination";
 import PropertyCard from "./PropertyCard";
 
-const ITEMS_PER_PAGE = 20;
-
 export default function PropertyList(props) {
-    let data = props.properties;
+    const { properties, itemPerPage, ...others } = props;
     let [page, setPage] = useState(1);
-    const count = Math.ceil(data.length / ITEMS_PER_PAGE);
-    const DATA_PAGINATION = DataPagination(data, ITEMS_PER_PAGE);
+    const count = Math.ceil(properties.length / itemPerPage );
+    const DATA_PAGINATION = DataPagination(properties, itemPerPage );
 
     useEffect(() => {
         gotoPage(1);
-    }, [data]);
+    }, [properties]);
 
     const gotoPage = (page) => {
         setPage(page);
@@ -27,12 +25,15 @@ export default function PropertyList(props) {
     }
 
     return (
-        <div className="container">
-            <h3>Property List</h3>
+        <div>
+            {
+                props.showTitle !== false &&
+                <h3>Property List</h3>
+            }
             <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 {DATA_PAGINATION.currentData().map(prop =>
                     <Grid key={prop.id} xs={12} md={6} lg={4} xl={3}>
-                        <PropertyCard {...prop} />
+                        <PropertyCard {...prop} {...others} />
                     </Grid>
                 )}
             </Grid>

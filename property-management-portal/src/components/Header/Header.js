@@ -1,10 +1,22 @@
 import './Header.scss';
 import React from "react";
 import {useKeycloak} from "@react-keycloak/web";
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { clearToken } from 'Utils';
 
 const Header = () => {
     const { keycloak } = useKeycloak();
+    const nav = useNavigate();
+
+    const onLogin = () => {
+        keycloak.login();
+        nav("/property");
+    }
+    const onLogout = () => {
+        keycloak.logout();
+        clearToken();
+        nav("");
+    }
 
     return (
         <header className="header-area">
@@ -22,14 +34,14 @@ const Header = () => {
 
                                 {!keycloak.authenticated && (
                                     <p>
-                                        <Link to="#" onClick={() => keycloak.login()}><i className="fa fa-sign-in"></i>Login</Link>
+                                        <Link to="#" onClick={onLogin}><i className="fa fa-sign-in"></i>Login</Link>
                                     </p>
                                 )}
 
                                 {!!keycloak.authenticated && (
                                     <p>
                                         Welcome, <strong>{keycloak.tokenParsed.preferred_username}!</strong> &nbsp;
-                                        <Link to="#" onClick={() => keycloak.logout()}><i className="fa fa-sign-out"></i>Logout</Link>
+                                        <Link to="#" onClick={onLogout}><i className="fa fa-sign-out"></i>Logout</Link>
                                     </p>
 
                                 )}
