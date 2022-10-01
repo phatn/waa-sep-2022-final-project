@@ -44,7 +44,7 @@ export default function PropertyCard(props) {
                     <CardActionArea onClick={cardClicked}>
                         <CardMedia component="img"
                             height="200"
-                            image={props.mainPicture} />
+                            image={props.mainPicture || props.pictures[0]} />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {props.formattedPrice} {props.numOfRoom} bds
