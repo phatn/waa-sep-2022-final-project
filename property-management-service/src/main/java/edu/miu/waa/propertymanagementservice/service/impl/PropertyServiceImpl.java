@@ -51,13 +51,14 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_CUSTOMER')")
     public Set<PropertyDto> findAll() {
         Set<Property> properties = new HashSet<>();
 
         KeyCloakUserDetailsAdapter owner = (KeyCloakUserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String role = owner.getRole();
+        System.out.println("current login ROLE: " + role);
         String email = owner.getUsername();
         if(role == "OWNER") {
             //find user
