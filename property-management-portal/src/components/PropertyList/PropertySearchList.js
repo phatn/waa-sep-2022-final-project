@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../services/AxiosService";
 import Constants from "Constants";
 import PropertyList from "./PropertyList";
+import { currencyUSDFormatter } from 'Utils';
 import "./PropertyList.scss";
 
 const DEFAULT_IMG = process.env.PUBLIC_URL + "/slider-1.jpeg";
@@ -20,12 +21,7 @@ const HOME_TYPES = [
 ];
 const RENT = "rent";
 const SELL = "sell";
-const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-});
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MAX_PRICE = 100_000_000;
@@ -64,13 +60,13 @@ export default function PropertySearchList(props) {
             }
             let minItem = {
                 value: value,
-                text: formatter.format(value)
+                text: currencyUSDFormatter.format(value)
             }
             minArr.push(minItem);
 
             let maxItem = {
                 value: value,
-                text: formatter.format(value)
+                text: currencyUSDFormatter.format(value)
             }
             maxArr.push(maxItem);
         }
@@ -81,13 +77,13 @@ export default function PropertySearchList(props) {
             }
             let minItem = {
                 value: value,
-                text: formatter.format(value)
+                text: currencyUSDFormatter.format(value)
             }
             minArr.push(minItem);
 
             let maxItem = {
                 value: value,
-                text: formatter.format(value)
+                text: currencyUSDFormatter.format(value)
             }
             maxArr.push(maxItem);
         }
@@ -169,7 +165,7 @@ export default function PropertySearchList(props) {
             if (val >= minVal) {
                 let maxItem = {
                     value: val,
-                    text: formatter.format(val)
+                    text: currencyUSDFormatter.format(val)
                 }
                 maxArr.push(maxItem);
             }
@@ -182,7 +178,7 @@ export default function PropertySearchList(props) {
             if (val >= minVal) {
                 let maxItem = {
                     value: val,
-                    text: formatter.format(val)
+                    text: currencyUSDFormatter.format(val)
                 }
                 maxArr.push(maxItem);
             }
@@ -205,7 +201,7 @@ export default function PropertySearchList(props) {
             if (val <= maxVal) {
                 let minItem = {
                     value: val,
-                    text: formatter.format(val)
+                    text: currencyUSDFormatter.format(val)
                 }
                 minArr.push(minItem);
             }
@@ -218,7 +214,7 @@ export default function PropertySearchList(props) {
             if (val <= maxVal) {
                 let minItem = {
                     value: val,
-                    text: formatter.format(val)
+                    text: currencyUSDFormatter.format(val)
                 }
                 minArr.push(minItem);
             }
@@ -292,7 +288,7 @@ export default function PropertySearchList(props) {
         properties.data.map(prop => {
             prop.mainPicture = prop.pictures != null && prop.pictures.length > 0 ?
                 prop.pictures[0] : DEFAULT_IMG
-            prop.formattedPrice = formatter.format(prop.price)
+            prop.formattedPrice = currencyUSDFormatter.format(prop.price)
             return prop;
         });
         setProperties(properties.data);

@@ -27,4 +27,9 @@ public interface PropertyService {
     void increaseView(int id);
 
     List<PropertyViewsByLocationDto> getViewsPerLocation();
+
+    PropertyDto updateListedProperty(int id, Boolean value);
+    void deleteProperty(int id);
+    PropertyDto updateProperty(int id, PropertyDto property);
+
 }

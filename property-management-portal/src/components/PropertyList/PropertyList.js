@@ -4,12 +4,16 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { useEffect, useState } from "react";
 import DataPagination from "../DataPagination/DataPagination";
 import PropertyCard from "./PropertyCard";
+import { deleteProperty } from 'services/PropertyService';
+import { useDispatch } from "react-redux";
 
 export default function PropertyList(props) {
     const { properties, itemPerPage, ...others } = props;
     let [page, setPage] = useState(1);
     const count = Math.ceil(properties.length / itemPerPage );
-    const DATA_PAGINATION = DataPagination(properties, itemPerPage );
+    const DATA_PAGINATION = DataPagination(properties, itemPerPage);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         gotoPage(1);
@@ -24,6 +28,12 @@ export default function PropertyList(props) {
         gotoPage(page);
     }
 
+    const handleDelete = (id) => {
+        if (typeof props.setRefresh === "function") {
+            props.setRefresh(true);
+        }
+    }
+
     return (
         <div>
             {
@@ -33,7 +43,7 @@ export default function PropertyList(props) {
             <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 {DATA_PAGINATION.currentData().map(prop =>
                     <Grid key={prop.id} xs={12} md={6} lg={4} xl={3}>
-                        <PropertyCard {...prop} {...others} />
+                        <PropertyCard {...prop} {...others} deletedFunc={() => handleDelete(prop.id)} />
                     </Grid>
                 )}
             </Grid>

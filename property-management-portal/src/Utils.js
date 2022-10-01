@@ -32,6 +32,5 @@ export const currencyUSDFormatter = new Intl.NumberFormat('en-US', {
 export function getLoggedRoles() {
     const access = jwt_decode(getToken()).realm_access.roles;
     const roles = access.find(el => Constants.ROLE_NAME.includes(el));
-    console.log('roles', roles);
     return roles;
 }

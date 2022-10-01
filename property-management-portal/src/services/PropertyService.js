@@ -42,6 +42,31 @@ export const createProperty = createAsyncThunk(
 
 export const getPropertyByEmail = createAsyncThunk('properties/fetchByEmail', async (email) => {
     const response = await axiosInstance.get(`/users/${email}/favourites`);
-    console.log('in PropertyService: ' + JSON.stringify(response.data))
     return response.data;
 });
+
+export const updateListedProperty = createAsyncThunk(
+  'properties/updateListed',
+  async (data) => {
+    const { id, listed } = data;
+    const result = await axiosInstance.patch(`/properties/${id}/listed/${listed}`);
+    return result.data;
+  }
+);
+
+export const deleteProperty = createAsyncThunk(
+  'properties/delete',
+  async (id) => {
+    const result = await axiosInstance.delete(`/properties/${id}`);
+    return result.data;
+  }
+);
+
+export const updateProperty = createAsyncThunk(
+  'properties/updateProperty',
+  async (data) => {
+    const { id, ...property } = data;
+    const result = await axiosInstance.put(`/properties/${id}`, property);
+    return result.data;
+  }
+);

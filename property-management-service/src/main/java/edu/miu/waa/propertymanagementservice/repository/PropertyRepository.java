@@ -4,12 +4,14 @@ import edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto;
 import edu.miu.waa.propertymanagementservice.entity.HomeType;
 import edu.miu.waa.propertymanagementservice.entity.Property;
 import edu.miu.waa.propertymanagementservice.entity.PropertyType;
+import edu.miu.waa.propertymanagementservice.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface PropertyRepository extends CrudRepository<Property, Integer> {
@@ -29,4 +31,6 @@ public interface PropertyRepository extends CrudRepository<Property, Integer> {
 
 	@Query("SELECT new edu.miu.waa.propertymanagementservice.dto.PropertyViewsByLocationDto(location.city, SUM(views)) FROM Property GROUP BY location.city")
 	List<PropertyViewsByLocationDto> getSumViewsByLocation();
+	Set<Property> findByDeletedFalseAndOwner(User owner);
+	Set<Property> findByDeletedFalse();
 }

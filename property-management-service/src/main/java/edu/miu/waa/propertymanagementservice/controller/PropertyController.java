@@ -48,4 +48,13 @@ public class PropertyController {
         propertyService.increaseView(id);
         return true;
     }
+    @PatchMapping("/{id}/listed/{value}")
+    public PropertyDto updateListedProperty(@PathVariable int id, @PathVariable Boolean value) {
+        return propertyService.updateListedProperty(id, value);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProperty(@PathVariable int id) {
+        propertyService.deleteProperty(id);
+    }
 }
