@@ -18,8 +18,12 @@ export function deriveEmailFromToken() {
 }
 
 export function isRole(role) {
-    const auth = jwt_decode(getToken());
-    return auth?.realm_access?.roles?.includes(role);
+    try {
+        const auth = jwt_decode(getToken());
+        return auth?.realm_access?.roles?.includes(role);
+    } catch (e) {
+        return false;
+    }
 }
 
 export const currencyUSDFormatter = new Intl.NumberFormat('en-US', {

@@ -23,7 +23,7 @@ public class ReportController {
 	private final PropertyService propertyService;
 	private final CacheManager cacheManager;
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 10000)
 	public void evictAllCaches() {
 		cacheManager.getCacheNames().forEach(cacheName -> Objects.requireNonNull(cacheManager.getCache(cacheName)).clear());
 	}
@@ -64,6 +64,7 @@ public class ReportController {
 	}
 
 	@GetMapping("/properties/views")
+	@Cacheable(value = "viewsPerLocation")
 	public List<PropertyViewsByLocationDto> getViewsPerLocation() {
 		return propertyService.getViewsPerLocation();
 	}

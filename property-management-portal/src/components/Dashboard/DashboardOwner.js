@@ -15,7 +15,7 @@ const DashboardOwner = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (viewsPerLocation) {
+        if (viewsPerLocation?.length > 0) {
             setViewsPerLocationChartOption({
                 xAxis: {
                     type: 'category',
