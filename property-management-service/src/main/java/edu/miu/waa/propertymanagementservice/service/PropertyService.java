@@ -17,7 +17,8 @@ public interface PropertyService {
                              int minRoomNumber, String street,
                              String city, String zipCode,
                              Boolean listed,
-                             Boolean deleted);
+                             Boolean deleted,
+                             Boolean onlyLocation);
 
     List<PropertyDto> report(String propertyType, List<String> homeType, String street, String city, String zipCode);
 

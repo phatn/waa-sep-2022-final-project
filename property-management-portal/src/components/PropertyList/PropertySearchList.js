@@ -120,6 +120,7 @@ export default function PropertySearchList(props) {
         if (initLocationTxt !== ",,") {
             setLocationTxt(initLocationTxt);
         }
+        searchParams.append("onlyLocation", true);
         let url = "/properties/search?" + searchParams.toString();
         getProperties(url);
     }
