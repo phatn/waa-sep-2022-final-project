@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { contact, createProperty, getPropertyById, requestVisit } from "services/PropertyService";
+import {
+  contact, createProperty,
+  getPropertyByEmail,
+  getAllProperties,
+  getPropertyById, requestVisit
+} from "services/PropertyService";
 
 const initialState = {
   properties: [],  loadedProperties: false,
@@ -25,23 +30,39 @@ const propertySlice = createSlice({
         state.loadedProperty = false;
     });
 
+    builder.addCase(getAllProperties.fulfilled, (state, action) => {
+      state.properties = action.payload;
+      state.loadedProperties = true;
+    });
+
+    builder.addCase(getAllProperties.pending, (state) => {
+      state.loadedProperties = false;
+    });
+
     builder.addCase(getPropertyById.fulfilled, (state, action) => {
         state.property = action.payload;
         state.loadedProperty = true;
     });
 
     builder.addCase(getPropertyById.pending, (state) => {
-        state.loadedProperty = false;
-    })
+      state.loadedProperty = false;
+    });
 
     builder.addCase(contact.fulfilled, (state, action) => {
       state.contactResponse = action.payload;
-    })
+    });
 
     builder.addCase(requestVisit.fulfilled, (state, action) => {
       state.contactResponse = action.payload;
-    })
+    });
 
+    builder.addCase(getPropertyByEmail.pending, (state) => {
+      state.loadedFavProperties = false;
+    });
+    builder.addCase(getPropertyByEmail.fulfilled, (state, action) => {
+      state.favProperties = action.payload;
+      state.loadedFavProperties = true;
+    });
   }
 });
 

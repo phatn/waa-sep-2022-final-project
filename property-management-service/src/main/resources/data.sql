@@ -1,12 +1,14 @@
 -- USERS
 INSERT INTO users(email)
 VALUES
-    ('tan.nguyen@miu.edu'),
+    ('phatnguyen@outlook.com'),
     ('thiep@gmail.com'),
     ('thi.truong@miu.edu'),
     ('phong@gmail.com'),
     ('adam@gmail.com'),
-    ('michael@gmail.com');
+    ('michael@gmail.com'),
+    ('truongthyen.yt@gmail.com'),
+    ('truthblue82@gmail.com');
 
 
 
@@ -83,7 +85,7 @@ VALUES
     (2500, 5, 'RENT', 'HOUSE', 'University Gateway Apartments are just steps from campus and offer USC students high-end features and A-List Amenities at a great price. Our apartments feature modern furniture packages, captivating views, designer flooring, flat screen TVs.', 'Casa Grande, 13518 Yukon Ave', 'Fairfield', '50000', true, false, CURRENT_DATE, 4,
      'https://waaproject-bucket.s3.us-west-1.amazonaws.com/94565dbbf813f2fe9c2efdf976f9b401-cc_ft_960.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/ce901a2820ce401564cce39b31c3520f-cc_ft_960.jpg', '2022-09-05', 23),
 
-    (3500, 6, 'SELL', 'APARTMENT', 'Plank flooring.  new quartz countertop, new windows, stainless steel stove and fridge, get $500 off 1st month rent on approved credit', '14427 Cerise Ave', 'Fairfield', '50001', true, false, CURRENT_DATE, 6,
+    (850, 6, 'RENT', 'APARTMENT', 'Plank flooring.  new quartz countertop, new windows, stainless steel stove and fridge, get $500 off 1st month rent on approved credit', '14427 Cerise Ave', 'Fairfield', '50001', true, false, CURRENT_DATE, 6,
      'https://waaproject-bucket.s3.us-west-1.amazonaws.com/94565dbbf813f2fe9c2efdf976f9b401-cc_ft_960.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/ce901a2820ce401564cce39b31c3520f-cc_ft_960.jpg', '2022-09-04', 24),
 
     (3000, 2, 'RENT', 'APARTMENT', 'The entire unit has been gutted and everything is brand new. Brand new bathrooms, kitchen, flooring, electrical, appliances (washer/dryer included), individualized ductless AC/Heater per room, closets.....', '4702 W 17th St #26', 'Dallas', '56556', true, false, CURRENT_DATE, 3,
@@ -99,7 +101,10 @@ VALUES
      'https://waaproject-bucket.s3.us-west-1.amazonaws.com/94565dbbf813f2fe9c2efdf976f9b401-cc_ft_960.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/ce901a2820ce401564cce39b31c3520f-cc_ft_960.jpg', '2022-08-30', 28),
 
     (230000, 4, 'SELL', 'HOUSE', 'Welcome to Grandview City Lights Spacious 3 bedroom apartment at Grandview City Lights in Los Angeles, experience great living in LOW-INCOME AFFORDABLE HOUSING.', '1219 W 25th St', 'Fairfield', '51551', false, true, CURRENT_DATE, 1,
-     'https://waaproject-bucket.s3.us-west-1.amazonaws.com/94565dbbf813f2fe9c2efdf976f9b401-cc_ft_960.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/ce901a2820ce401564cce39b31c3520f-cc_ft_960.jpg', '2022-08-29', 29);
+     'https://waaproject-bucket.s3.us-west-1.amazonaws.com/94565dbbf813f2fe9c2efdf976f9b401-cc_ft_960.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/ce901a2820ce401564cce39b31c3520f-cc_ft_960.jpg', '2022-08-29', 29),
+
+    (230000, 4, 'SELL', 'HOUSE', 'Welcome to Fairfield City Liberty Park Apartment. It has 2 bedrooms, 1 restroom, 1 living room.', '2006 LibertyVille', 'Fairfield', '52556', false, true, CURRENT_DATE, 3,
+       'https://waaproject-bucket.s3.us-west-1.amazonaws.com/house4-1664509721.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/house4-1-1664509725.jpg;https://waaproject-bucket.s3.us-west-1.amazonaws.com/house4-3-1664509730.jpg', '2022-08-30', 30);
 
 INSERT INTO favorite_properties_users(user_id, property_id)
 VALUES

@@ -12,6 +12,7 @@ import edu.miu.waa.propertymanagementservice.repository.PropertyRepository;
 import edu.miu.waa.propertymanagementservice.service.PropertyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,15 +28,14 @@ public class PropertyServiceImpl implements PropertyService {
     private final AWSConfigProperties configAWS;
 
     @Override
+    @PreAuthorize("hasRole('ROLE_OWNER')")
     public PropertyDto save(PropertyDto property) {
         Set<String> pictureNames = property.getPictures();
         Set<String> pictureUrls = s3FileService.getPresignedUrls(pictureNames);
         String awsBaseUrl = configAWS.getBaseUrl();
 
         Set<String> basePictureUrls = pictureNames.stream()
-                .map(name -> {
-                    return awsBaseUrl + "/" + name;
-                }).collect(Collectors.toSet());
+                .map(name -> awsBaseUrl + "/" + name).collect(Collectors.toSet());
 
         property.setPictures(basePictureUrls);
 
@@ -46,6 +46,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     public Set<PropertyDto> findAll() {
         Set<Property> properties = new HashSet<>();
         propertyRepo.findAll().forEach(properties::add);

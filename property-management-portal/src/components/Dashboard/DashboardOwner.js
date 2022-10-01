@@ -16,21 +16,21 @@ const DashboardOwner = () => {
 
     useEffect(() => {
         if (viewsPerLocation) {
-            setViewsPerLocationChartOption({
-                xAxis: {
-                    type: 'category',
-                    data: viewsPerLocation.map(c => c.city)
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: viewsPerLocation.map(c => c.views),
-                        type: 'bar'
-                    }
-                ]
-            })
+            // setViewsPerLocationChartOption({
+            //     xAxis: {
+            //         type: 'category',
+            //         data: viewsPerLocation.map(c => c.city)
+            //     },
+            //     yAxis: {
+            //         type: 'value'
+            //     },
+            //     series: [
+            //         {
+            //             data: viewsPerLocation.map(c => c.views),
+            //             type: 'bar'
+            //         }
+            //     ]
+            // })
         }
     }, [viewsPerLocation]);
 

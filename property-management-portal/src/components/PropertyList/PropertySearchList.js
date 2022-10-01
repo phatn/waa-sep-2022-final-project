@@ -1,14 +1,14 @@
+import { useEffect, useState } from "react";
 import {
     Button, Checkbox, FormControl, Grid,
     InputLabel, ListItemText, MenuItem,
     OutlinedInput, Select, TextField
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../services/AxiosService";
 import Constants from "Constants";
-import "./PropertyList.scss";
 import PropertyList from "./PropertyList";
-import { useSearchParams } from "react-router-dom";
+import "./PropertyList.scss";
 
 const DEFAULT_IMG = process.env.PUBLIC_URL + "/slider-1.jpeg";
 const HOME_TYPES = [
@@ -288,7 +288,6 @@ export default function PropertySearchList(props) {
         console.log("Get properties");
         console.log(Constants);
         let properties = await axiosInstance.get(url);
-        console.log(properties);
         // set default image
         properties.data.map(prop => {
             prop.mainPicture = prop.pictures != null && prop.pictures.length > 0 ?
@@ -414,7 +413,10 @@ export default function PropertySearchList(props) {
                 </Grid>
 
             </Grid>
-            <PropertyList properties={properties}></PropertyList>
+            <PropertyList
+                properties={properties}
+                itemPerPage={20}
+            />
         </div>
     )
 };

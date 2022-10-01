@@ -5,6 +5,7 @@ import edu.miu.waa.propertymanagementservice.domain.RequestVisitDetail;
 import edu.miu.waa.propertymanagementservice.service.ContactService;
 import edu.miu.waa.propertymanagementservice.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class ContactServiceImpl implements ContactService {
     private final EmailService emailService;
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public String requestVisit(RequestVisitDetail requestVisitDetail) {
         String recipient = requestVisitDetail.getOwnerEmail();
         String title = "MIU Property Visit Request";
@@ -74,6 +76,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public String contact(ContactDetail contactDetail) {
         String recipient = contactDetail.getOwnerEmail();
         String title = "MIU Property Contact Request";

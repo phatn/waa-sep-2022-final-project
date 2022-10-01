@@ -5,7 +5,7 @@ import {Box, Button, Modal, Typography} from "@mui/material";
 import './PropertyDetail.scss';
 import RequestTour from "./RequestTour";
 import ContactAgent from "./ContactAgent";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 
 export default function PropertyDetail(props) {
@@ -20,6 +20,7 @@ export default function PropertyDetail(props) {
     const propertyState = useSelector((state) => state.property);
 
     const dispatch = useDispatch();
+    const nav = useNavigate();
 
     const params = useParams();
 
@@ -32,7 +33,11 @@ export default function PropertyDetail(props) {
     const [open, setOpen] = useState(props.open);
 
 
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        nav(-1);
+    }
+
     const style = {
         position: 'absolute',
         top: '50%',

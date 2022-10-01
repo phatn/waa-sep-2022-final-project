@@ -4,13 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-public class User {
+@EntityListeners(AuditListener.class)
+public class User implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +36,17 @@ public class User {
 
     @OneToMany(mappedBy = "customer")
     private Set<Application> customerApplications;
+
+    // ======== Audit ===============
+    private LocalDateTime createdDate;
+
+    private String createdBy;
+
+    private String deletedBy;
+
+    private LocalDateTime deletedDate;
+
+    private LocalDateTime updatedDate;
+
+    private String updatedBy;
 }
